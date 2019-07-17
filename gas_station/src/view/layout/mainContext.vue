@@ -4,6 +4,7 @@
       <transition mode="out-in" enter-active-class="bounceInleft" leave-active-class="bounceOutRight">
         <router-view class="tab-content animated"></router-view>
       </transition>
+      <div class="footer">CopyRight © 西安通尚电子科技有限公司 .All Rights Reserved 2019 - 2020</div>
     </div>
   </div>
 </template>
@@ -41,6 +42,10 @@
     padding: 25px !important;
     bottom:0px;
     right: 0;
+  }
+  .footer{
+    padding: 20px;
+    font-size: 14px;
   }
 </style>
 

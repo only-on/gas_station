@@ -11,11 +11,20 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/sys': {
-        target: 'http://localhost:8090',
+      '/olmgs/web': {
+        // target: 'http://192.168.100.63:8081',
+        target: 'http://localhost:8083',
         changeOrigin: true,
         pathRewrite: {
-          '^/sys': '/sys'
+          '^/olmgs/web': '/olmgs/web'
+        }
+      },
+      '/olmgs/sys': {
+        // target: 'http://127.0.0.1:8005',
+        target: 'http://localhost:8005',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/olmgs/sys': '/olmgs/sys'
         }
       }
     },

@@ -1,5 +1,118 @@
 @import '../variable/variable.less'; // 基础布局类
 .body{
   margin: 20px !important;
+  min-height: 88%;
+}
+.body-head {
+  height: 60px;
+  padding: 13px 20px 10px 20px !important;
+  background: @main-text-white;
+  border-bottom:1px solid @main-border-line;
+  text-align: left !important;
+}
+.content {
+  padding: 20px !important;
+  background: @main-text-white;
+  margin-bottom: 20px;
+  box-shadow:0px 2px 17px 0px rgba(190,190,190,0.5);
+}
+.searchBox {
+  margin-bottom: 20px !important;
+  text-align: left;
+}
+.searchBox-title {
+  padding: 5px 12px 10px 0px !important;
+  text-align: left;
+}
+.searchInput {
+  width: 300px !important;
+}
+.body-content {
+  text-align: center;
+}
+.pages-block {
+  margin-top: 10px !important;
+  overflow: hidden;
+  margin-left: 1px;
+  margin-bottom: 10px;
+  text-align: left;
+  padding: 5px;
+  background: @main-text-white;
+}
+.pages-right {
+  vertical-align: middle;
+}
+.layout-content-form {
+  margin-top: 20px;
+  text-align: left;
+}
+.notice{
+  color: @notice-text-color;
+  margin-left: 10px;
+  text-align: left;
+}
+.noticeTextGray {
+  color: @notice-text-gray;
+}
+.selfValidate .ivu-form-item-label:before{
+  content: '*';
+  display: inline-block;
+  margin-right: 4px;
+  line-height: 1;
+  font-family: SimSun;
+  font-size: 12px;
+  color: @notice-text-color;
+}
+.file {
+  position: relative;
+  display: inline-block;
+  background: @btn-system;
+  border: 1px solid @btn-box-shadow;
+  border-radius: 8px;
+  padding: 4px 12px;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  text-indent: 0;
+  line-height: 20px;
+}
+.file input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
+.file:hover {
+  background: @btn-system;
+  border-color: @btn-box-shadow;
+  color: #fff;
+  text-decoration: none;
+}
+.echarts-content {
+  background: @main-text-white;
+  margin-bottom: 20px;
+  box-shadow:0px 2px 17px 0px rgba(190,190,190,0.5);
 }
 
+.card-top-box {
+  height: 50px;
+  background: @main-card-top-box;
+}
+.card-title-text {
+  font-size:20px;
+  font-family: PingFangSC-Medium;
+  font-weight:500;
+  color: @login-title-color;
+  text-align: left;
+  padding: 10px 20px !important;
+  float: left;
+}
+.card-search-bar {
+  text-align: left;
+}
+.card-content {
+  padding: 20px 20px !important;
+  background: @main-text-white;
+  height: 350px;
+}

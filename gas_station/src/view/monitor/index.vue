@@ -1,90 +1,249 @@
 <template>
   <div id="body">
    <Row class="titleBar">
-      <div>北京丰辰鲁谷加油站</div>
+      <div>CopyRight © 西安通尚电子科技有限公司 .All Rights Reserved 2019 - 2020</div>
+      <div>{{stationName}}</div>
      <Button class="logoutBtn" @click="logoutMonitor">退出监控</Button>
    </Row>
-    <div class="content">
+    <div id="content">
       <Row :gutter="24" style="height: 100%">
         <!--左侧-->
         <Col span="16">
           <Row class="oliGunInfo">
-            <Row type="flex" justify="start" :gutter="16" style="font-size: 16px;line-height: 27px;margin-bottom: 30px">
+            <Row type="flex" justify="start" :gutter="16" style="font-size: 16px;line-height: 27px;">
               <Col span="3">
                 基本信息
               </Col>
               <Col span="3">
                 <img src="../../assets/oligun.png" alt="" style="width:20px;height: 17px">
-              油枪 <span>28</span>
+              油枪 <span class="basicText">{{basicData.nozzleCount}}</span>
               </Col>
               <Col span="3">
               <img src="../../assets/tanker.png" alt="" style="width:17px;height: 17px">
-              加油机 <span>6</span>
+              加油机 <span class="basicText">{{basicData.tankerCount}}</span>
               </Col>
               <Col span="3">
               <img src="../../assets/tank.png" alt="" style="width:17px;height: 17px">
-              油罐 <span>3</span>
+              油罐 <span class="basicText">{{basicData.oilTankCount}}</span>
               </Col>
             </Row>
             <div class="mainCon">
-              <div class="oliItem">
-                <!--第一行-->
-                <div class="itemLine" v-for="(each,eachIndex) in oliList" :key="eachIndex">
-                  <div class="itemSet" v-for="(item,index) in each" :key="index">
-                    <!--四六个油枪-->
-                   <div v-if="item.length < 7">
-                     <div style="float: left;margin-right:13px">
-                       <div v-for="(item1, index1) in item.children[0]" :key="index1">
-                         <oligun :dir="item.length > 4 ? index1*2+2 : 4" :type="item1.type" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :name="item1.name" :oliType="item1.oliType" :oliVal="item1.oliVal"></oligun>
-                       </div>
-                     </div>
-                     <div style="float: left;position: relative;z-index:2">
-                       <img src="../../assets/tankerBig.png" alt="" class="tankImage">
-                       <span class="tankName" style="font-size:16px">{{item.name}}<br>加油机</span>
-                       <div class="tankLine"></div>
-                     </div>
-                     <div style="float: right;margin-left:23px">
-                       <div  v-for="(item2, index2) in item.children[1]" :key="index2">
-                         <oligun :dir="item.length > 4 ? index2*2+1 : 3" :type="item2.type" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :name="item2.name" :oliType="item2.oliType" :oliVal="item2.oliVal"></oligun>
-                       </div>
-                     </div>
-                   </div>
-                    <!--8个油枪-->
-                    <div v-if="item.length >= 7" class="eightBox">
-                      <div style="float: left;margin-right:20px" v-for="(item3, index3) in item.children[0]" :key="index3+'i'">
-                        <div v-for="(item3s, index3s) in item3" :key="index3s+'i'">
-                          <oligun :dir="4" :type="item3s.type" class="dir24" :name="item3s.name" :oliType="item3s.oliType" :oliVal="item3s.oliVal"></oligun>
-                        </div>
+              <Col span="18">
+              <div class="oliItem" :style="tankCount> 2 && tankCount < 5 ? 'padding:0 100px 0 90px' :'padding-right: 20px;'">
+                <!--二个加油机-->
+                <div class="itemLine" v-for="(each,eachIndex) in oliArr" :key="eachIndex" v-if="tankCount < 3">
+                  <div class="itemSet" v-for="(item,index) in each" :key="index" style="margin-bottom: 10px">
+                    <div style="float: left;margin-right:13px;">
+                      <div v-for="(item1, index1) in item.children[0]" :key="index1" :style="tankCount < 3 ? 'margin-bottom: 20px': ''">
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
                       </div>
-                      <div style="float: left;position: relative;z-index:2">
-                        <img src="../../assets/tankerBig.png" alt="" class="tankImage">
-                        <span class="tankName" style="font-size:16px">{{item.name}}<br>加油机</span>
-                        <div class="tankLine"></div>
+                    </div>
+                    <div style="float: left;position: relative;z-index:2">
+                      <img src="../../assets/tankerBig.png" alt="" class="tankImage tankImage2">
+                      <span class="tankName tankName2" style="font-size:16px;color:#8AFFF5">{{item.number}}号<br>加油机</span>
+                    </div>
+                    <div style="float: right;margin-left:23px">
+                      <div  v-for="(item2, index2) in item.children[1]" :key="index2" :style="tankCount < 3 ? 'margin-bottom: 20px': ''">
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
                       </div>
-                      <div  class="eightOli" v-for="(item4, index4) in item.children[1]" :key="index4+'j'">
-                        <div v-for="(item4s, index4s) in item4" :key="index4s+'j'">
-                          <oligun :dir="3" :type="item4s.type" class="dir23" :name="item4s.name" :oliType="item4s.oliType" :oliVal="item4s.oliVal"></oligun>
-                        </div>
+                    </div>
+                  </div>
+                </div>
+                <!--四个加油机-->
+                <div class="itemLine" v-for="(each,eachIndex) in oliArr" :key="eachIndex" v-if="tankCount > 2 && tankCount < 5" >
+                  <div class="itemSet" v-for="(item,index) in each" :key="index" style="margin-bottom: 10px">
+                    <div style="float: left;margin-right:13px;">
+                      <div v-for="(item1, index1) in item.children[0]" :key="index1">
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
+                      </div>
+                    </div>
+                    <div style="float: left;position: relative;z-index:2">
+                      <img src="../../assets/tankerBig.png" alt="" class="tankImage tankImage4">
+                      <span class="tankName tankName4" style="font-size:16px;color:#8AFFF5">{{item.number}}号<br>加油机</span>
+                    </div>
+                    <div style="float: left;margin-left:23px">
+                      <div  v-for="(item2, index2) in item.children[1]" :key="index2" >
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--六个加油机-->
+                <div class="itemLine" v-for="(each,eachIndex) in oliArr" :key="eachIndex" v-if="tankCount > 4 && tankCount < 7">
+                  <div class="itemSet" v-for="(item,index) in each" :key="index" :style="item.id === -1 ? 'visibility: hidden;margin-bottom:10px':'visibility: visible;margin-bottom:10px'">
+                    <div style="float: left;margin-right:13px;">
+                      <div v-for="(item1, index1) in item.children[0]" :key="index1">
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
+                      </div>
+                    </div>
+                    <div style="float: left;position: relative;z-index:2">
+                      <img src="../../assets/tankerBig.png" alt="" class="tankImage tankImage6">
+                      <span class="tankName tankName6" style="font-size:16px;color:#8AFFF5 ">{{item.number}}号<br>加油机</span>
+                    </div>
+                    <div style="float: left;margin-left:23px">
+                      <div  v-for="(item2, index2) in item.children[1]" :key="index2" >
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <Row class="oliBox">
-                <!--连接线-->
-                <Row class="contactLine"></Row>
+              </Col>
+              <Col span="6">
+              <Carousel
+                v-model="value3"
+                :loop="setting.loop"
+                :autoplay="setting.autoplay"
+                :autoplay-speed="setting.autoplaySpeed"
+                :dots="setting.dots"
+                :radius-dot="setting.radiusDot"
+                :trigger="setting.trigger"
+                :arrow="setting.arrow" easing="none">
                 <!--油罐-->
-                <div style="display: flex;justify-content: space-around;margin-top: 20px;">
-                  <!--油罐-->
-                  <div style="position: relative" v-for="(item,index) in tankList" :key="index">
-                    <div class="olinum">{{item.name}}</div>
-                    <div class="oliTank">
-                      <span class="quantityNum">{{item.value}}%</span>
-                      <div class="oliQuantity warning" :style="'height:' + item.value +'%'"></div>
+                <CarouselItem>
+                  <div class="demo-carousel">
+                    <div class="tankBox">
+                      <div class="tankBoxTitle">油罐</div>
+                      <div style="position: relative;height: 100%" >
+                        <Col :span="spanVal" v-for="(items,indexs) in tankList" :key="indexs" style="height: 100%">
+                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                            <Row type="flex" justify="center" style="margin-bottom: 5px">
+                              <div style="position: relative">
+                                <div :class="oliTankBackground(item.oilTankStatus, 1)"></div>
+                                <div :class="oliTankBackground(item.oilTankStatus, 0)">
+                                  <div :class="oliTankColor(item.oilTankStatus)" :style="'height:' + (item.value === null ? 0 : item.value) +'%'"></div>
+                                  <div class="numQuantity">{{item.name}}罐{{item.oilNumber}}#</div>
+                                </div>
+                                <img src="../../assets/leak.png" alt="" class="leakImage"  v-if="item.leak === true">
+                                <img src="../../assets/equipIcon.png" alt="" class="leakImage" v-if="item.signalAndExploring === true" :style="item.leak === true ? 'right:-25px' : ''">
+                              </div>
+                            </Row>
+                            <div>
+                              <Row class="oliTankInfo" type="flex" justify="start">
+                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                <img :src="iconImage(item.oilTankStatus, 0)" alt="">
+                                <span :style="textColor(item.oilTankStatus)">
+                                  <span>油罐压力</span>
+                                  <span>{{item.pressure === null ? '-' : item.pressure + ' pa'}}</span>
+                                </span>
+                                </Col>
+                              </Row>
+                              <Row class="oliTankInfo" type="flex" justify="start">
+                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                <img :src="iconImage(item.sidewaysStatus, 1)" alt="">
+                                <span :style="textColor(item.sidewaysStatus)">
+                                  <span>测漏压力</span>
+                                  <span>{{item.sidewaysPressure === null ? '-' : item.sidewaysPressure + ' pa'}}</span>
+                                </span>
+                                </Col>
+                              </Row>
+                              <Row class="oliTankInfo" type="flex" justify="start">
+                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                <img :src="remainG" alt="">
+                                <span>
+                                   <span>剩余油量</span>
+                                  <span>{{item.value === null ? '未知' : item.value + '%'}}</span>
+                                 </span>
+                                </Col>
+                              </Row>
+                            </div>
+                          </div>
+                        </div>
+                        </Col>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Row>
+                </CarouselItem>
+                <!--双层管线-->
+                <CarouselItem v-if="pipeList.length !== 0">
+                  <div class="demo-carousel">
+                    <div class="tankBox">
+                      <div class="tankBoxTitle">管线</div>
+                      <div style="position: relative;height: 100%" >
+                        <Col :span="spanVal" v-for="(items,indexs) in pipeList" :key="indexs" style="height: 100%">
+                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                            <div>
+                              <Row type="flex" justify="center">
+                                <div  style="position: relative">
+                                  <img :src="item.status === 1 ? pipeG : pipeR" alt="" style="height:35px;width:70px">
+                                  <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
+                                  <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
+                                </div>
+                              </Row>
+                              <Row style="font-size: 14px;">{{item.number}}#</Row>
+                              <Row type="flex" justify="center">
+                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
+                              </Row>
+                            </div>
+                          </div>
+                        </div>
+                        </Col>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+                <!--复合人井-->
+                <CarouselItem v-if="peopleWellList.length !== 0">
+                  <div class="demo-carousel">
+                    <div class="tankBox">
+                      <div class="tankBoxTitle">人井</div>
+                      <div style="position: relative;height: 100%" >
+                        <Col :span="spanVal" v-for="(items,indexs) in peopleWellList" :key="indexs" style="height: 100%">
+                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                            <div>
+                              <Row type="flex" justify="center">
+                                <div  style="position: relative">
+                                  <img :src="item.status === 1 ? wellG : wellR" alt="" style="width:62px;height:50px;">
+                                  <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
+                                  <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
+                                </div>
+                              </Row>
+                              <Row style="font-size: 14px;">{{item.number}}#</Row>
+                              <Row type="flex" justify="center">
+                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
+                              </Row>
+                            </div>
+                          </div>
+                        </div>
+                        </Col>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+                <!--加油机底槽-->
+                <CarouselItem v-if="oliBasinList.length !== 0">
+                  <div class="demo-carousel">
+                    <div class="tankBox">
+                      <div class="tankBoxTitle">油盆</div>
+                      <div style="position: relative;height: 100%;" >
+                        <Col :span="spanVal" v-for="(items,indexs) in oliBasinList" :key="indexs" style="height: 100%">
+                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                            <div>
+                              <Row type="flex" justify="center">
+                                <div  style="position: relative">
+                                  <img :src="item.status === 1 ? bottomG : bottomR" alt="" style="width:60px;height:50px;">
+                                  <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
+                                  <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
+                                </div>
+                              </Row>
+                              <Row style="font-size: 14px;">{{item.number}}#</Row>
+                              <Row type="flex" justify="center">
+                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
+                              </Row>
+                            </div>
+                          </div>
+                        </div>
+                        </Col>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              </Carousel>
+              </Col>
             </div>
           </Row>
           <Row type="flex" justify="space-between">
@@ -96,7 +255,7 @@
                   加油时间<br>(h)
                 </Row>
                 <Row style="color:#8AFFF5;font-size: 22px">
-                  20
+                  {{dataStastic.time}}
                 </Row>
               </Col>
               <Col span="8">
@@ -104,7 +263,7 @@
                   加油次数<br>(次)
                 </Row>
                 <Row style="color:#8AFFF5;font-size: 22px">
-                  120
+                  {{dataStastic.number}}
                 </Row>
               </Col>
               <Col span="8">
@@ -112,7 +271,7 @@
                   平均时间<br>(min/次)
                 </Row>
                 <Row style="color:#8AFFF5;font-size: 22px">
-                  12
+                  {{dataStastic.average}}
                 </Row>
               </Col>
             </Row>
@@ -122,24 +281,24 @@
               <Row class="tipTitle" style="margin-top: 5px">
               <Row style="margin: 10px 0 10px">
                 <Col span="8">
-                  92#<br>(T)
+                  92#<br>(L)
                 </Col>
                 <Col span="8">
-                95#<br>(T)
+                95#<br>(L)
                 </Col>
                 <Col span="8">
-                98#<br>(T)
+                98#<br>(L)
                 </Col>
               </Row>
                 <Row id="oliTypeBox"></Row>
             </Row>
             </Col>
-            <Col span="9" class="leftBottom">
-            <Row type="flex" justify="space-between">
-              <Col>告警数量统计</Col>
-              <Col style="color:#98E0FF;font-size: 16px">总计 <span style="color:#87FFE6">36</span></Col>
-            </Row>
-              <Row id="alarmBox"></Row>
+            <Col span="9" class="leftBottom" style="position: relative">
+              <Row type="flex" justify="space-between">
+                <Col>当前告警数量统计</Col>
+                <Col style="color:#98E0FF;font-size: 16px">总计 <span style="color:#87FFE6">{{alarmTotal}}</span></Col>
+              </Row>
+              <Row id="alarmBox" style="position: absolute;bottom: 0;left: 20px;"></Row>
             </Col>
           </Row>
         </Col>
@@ -149,22 +308,22 @@
             <Row>
               <Col span="12">
               <Row type="flex" justify="start" style="font-size:18px;margin-bottom: 10px">
-                01机03枪92#
-                <span style="margin-left: 20px;color:#74FFA7">加油中...</span>
+                {{nozzleObj.tankerNumber}}机{{nozzleObj.number}}枪{{nozzleObj.oilNumber}}#
+                <!--<span style="margin-left: 20px;color:#74FFA7">加油中</span>-->
               </Row>
               <Row>
                 <Col span="7">
-                  <div class="olitankItem greenItem">
-                    <img src="../../assets/green.png" alt="">
+                  <div :class="nozzleClass">
+                    <img :src="nozzleImage" alt="">
                   </div>
                 </Col>
                 <Col span="16">
                   <Row type="flex" justify="start">
-                    <div class="olitankStatus greenStatus" style="margin-left: 0">正常</div>
+                    <div :class="nozzleStatus" style="margin-left: 0">{{nozzleObj.status === 1 ? '正常' : nozzleObj.status === 2 ? '离线' : nozzleObj.status === 3 ? '预警' : nozzleObj.status === 4 && nozzleObj.close === false ? '报警': '停用'}}</div>
                   </Row>
                 <Row type="flex" justify="start" style="font-size:14px;margin-top: 20px">
                   平均气液比
-                  <span class="gasLiquid">1.1</span>
+                  <span class="gasLiquid">{{nozzleObj.oilAverageValue}}</span>
                 </Row>
                 </Col>
               </Row>
@@ -180,17 +339,17 @@
             </Row>
           </Row>
           <Row class="oliGunDetail">
-            <Row type="flex" justify="start" style="font-size:18px;margin-bottom: 10px">
-              <span style="margin-right: 20px">油罐监测</span>
+            <Row type="flex" justify="start" style="font-size:18px;margin-bottom:15px">
+              <span style="margin-right: 20px">环境监测</span>
             </Row>
             <Row>
               <div id="fourGauge"></div>
             </Row>
-            <Row type="flex" justify="space-around" style="margin-left:-8px">
-              <div class="olitankStatus greenStatus">正常</div>
-              <div class="olitankStatus greenStatus">正常</div>
-              <div class="olitankStatus greenStatus">正常</div>
-              <div class="olitankStatus greenStatus">正常</div>
+            <Row type="flex" justify="space-around" style="margin-top:-8px;margin-bottom: 10px">
+                <div v-for="(item,index) in statusList" :key="index + 'a'" >
+                  <span class="gaugeTitle">{{item.name}}</span>
+                  <div :class="item.value === '1' ? 'olitankStatus greenStatus' : item.value === '2' ? 'olitankStatus disStatus' : item.value === '3' ? 'olitankStatus yellowStatus' : 'olitankStatus redStatus'">{{item.value === '1' ? '正常' : item.value === '2' ? '离线' : item.value === '3' ? '预警' : '报警'}}</div>
+                </div>
             </Row>
             <Row>
               <div id="pressureBox"></div>
@@ -205,340 +364,442 @@
 <script>
   import echarts from 'echarts'
   import oligun from '@/components/oliGun'
+  import { todayData, oliTankMonitor, monitorAlarm, monitorBasic, monitorNozzle, monitorThresold, monitorTank, userLogOut, pipeLine, peopleWell, oliBasin } from '../../api/api'
   export default {
     components: {
       oligun
     },
     data () {
       return {
-        sideRange:[-70, -50],
-        oliTankRange: [-300,300],
-        gasRange: [1, 1.2],
-        oliList: [
+        isLimit: false,
+        value3: 0,
+        pushVal: 0,
+        oneSpan: 0,
+        setting: {
+          loop: false,
+          autoplay: true,
+          autoplaySpeed: 10000,
+          dots: 'inside',
+          radiusDot: false,
+          trigger: 'click',
+          arrow: 'never'
+        },
+        pipeList:[],
+        peopleWellList: [],
+        oliBasinList: [],
+        onlyFlag: true,
+        conType: '',
+        conStatus: 0,
+        spanVal: 12,
+        tankCount: 0,
+        alarmTypeList: [],
+        lineNum: 0,
+        stationName: '北京丰辰鲁谷加油站',
+        nozzleTimer: null,
+        red: require('@/assets/red.png'),
+        dis: require('@/assets/disable.png'),
+        green: require('@/assets/green.png'),
+        yellow: require('@/assets/yellow.png'),
+        guanyaG: require('@/assets/guanya_g.png'),
+        remainG: require('@/assets/remain_g.png'),
+        celouG: require('@/assets/celou_g.png'),
+        guanyaY: require('@/assets/guanya_y.png'),
+        celouY: require('@/assets/celou_y.png'),
+        guanyaR: require('@/assets/guanya_r.png'),
+        celouR: require('@/assets/celou_r.png'),
+        guanyaH: require('@/assets/guanya_h.png'),
+        celouH: require('@/assets/celou_h.png'),
+        pipeG: require('@/assets/pipe_g.png'),
+        pipeR: require('@/assets/pipe_r.png'),
+        wellG: require('@/assets/peopleWell_g.png'),
+        wellR: require('@/assets/peopleWell_r.png'),
+        bottomG: require('@/assets/tankBottom_g.png'),
+        bottomR: require('@/assets/tankBottom_r.png'),
+        nozzleList: [],
+        nozzleObj: {
+          tankerNumber: '',
+          number: '',
+          oilNumber: '',
+          oilValue: 0,
+          oilAverageValue: 0,
+          status: '',
+          refuel: false,
+          list: []
+        },
+        nozzleStatus: '',
+        nozzleImage: '',
+        nozzleClass: '',
+        widthLen: false,
+        oliArr: [],
+        oliArr1: [
           [
             {
-              name: '1号',
-              length: 4,
+              number: '1',
+              length: 6,
               children: [
                 [{
-                  name: '01枪',
-                  oliType: '92#',
+                  number: '01枪',
+                  oilNumber: '92#',
                   oliVal: '1.1',
-                  type: 0
+                  status: 1,
+                  refuel: false,
+                  close: false
                 },
                   {
-                    name: '02枪',
-                    oliType: '95#',
+                    number: '02枪',
+                    oilNumber: '95#',
                     oliVal: '1.8',
-                    type: 1
-                  }],
-                [
-                  {
-                    name: '03枪',
-                    oliType: '92#',
-                    oliVal: '1.1',
-                    type: 2
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '04枪',
-                    oliType: '98#',
+                    number: '02枪',
+                    oilNumber: '95#',
+                    oliVal: '1.8',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  }
+                  ],
+                [
+                  {
+                    number: '03枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '04枪',
+                    oilNumber: '98#',
                     oliVal: '1.5',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '04枪',
+                    oilNumber: '98#',
+                    oliVal: '1.5',
+                    status: 1,
+                    refuel: false,
+                    close: false
                   }
                 ]
               ]
             },
             {
-              name: '3号',
+              number: '3',
               length: 8,
               children: [
                 [
-                  [
-                    {
-                      name: '11枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                    {
-                      name: '12枪',
-                      oliType: '95#',
-                      oliVal: '1.8',
-                      type: 2
-                    }
-                  ],
-                 [
-                   {
-                     name: '13枪',
-                     oliType: '92#',
-                     oliVal: '1.1',
-                     type: 3
-                   },
-                   {
-                     name: '14枪',
-                     oliType: '92#',
-                     oliVal: '1.1',
-                     type: 3
-                   },
-                 ]
-                ],
-                [
-                  [
-                    {
-                      name: '15枪',
-                      oliType: '98#',
-                      oliVal: '1.5',
-                      type: 0
-                    },
-                    {
-                      name: '16枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                  ],
-                 [
-                   {
-                     name: '17枪',
-                     oliType: '98#',
-                     oliVal: '1.5',
-                     type: 1
-                   },
-                   {
-                     name: '18枪',
-                     oliType: '98#',
-                     oliVal: '1.5',
-                     type: 0
-                   }
-                 ]
-                ]
-              ]
-            },
-            {
-              name: '2号',
-              length: 6,
-              children: [
-                [
                   {
-                    name: '05枪',
-                    oliType: '92#',
+                    number: '11枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 1
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '06枪',
-                    oliType: '95#',
+                    number: '12枪',
+                    oilNumber: '95#',
                     oliVal: '1.8',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '07枪',
-                    oliType: '92#',
+                    number: '13枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                 ],
                 [
                   {
-                    name: '08枪',
-                    oliType: '98#',
+                    number: '15枪',
+                    oilNumber: '98#',
                     oliVal: '1.5',
-                    type: 1
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '09枪',
-                    oliType: '92#',
+                    number: '16枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 3
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '04枪',
-                    oliType: '98#',
-                    oliVal: '1.5',
-                    type: 0
-                  }
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
                 ]
               ]
             },
           ],
           [
             {
-              name: '1号',
-              length: 4,
+              number: '1',
+              length: 8,
               children: [
                 [{
-                  name: '01枪',
-                  oliType: '92#',
+                  number: '01枪',
+                  oilNumber: '92#',
                   oliVal: '1.1',
-                  type: 1
+                  status: 1,
+                  refuel: false,
+                  close: false
                 },
                   {
-                    name: '02枪',
-                    oliType: '95#',
+                    number: '02枪',
+                    oilNumber: '95#',
                     oliVal: '1.8',
-                    type: 4
-                  }],
-                [
-                  {
-                    name: '03枪',
-                    oliType: '92#',
-                    oliVal: '1.1',
-                    type: 2
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '04枪',
-                    oliType: '98#',
+                    number: '02枪',
+                    oilNumber: '95#',
+                    oliVal: '1.8',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  }
+                ],
+                [
+                  {
+                    number: '03枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '04枪',
+                    oilNumber: '98#',
                     oliVal: '1.5',
-                    type: 1
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '02枪',
+                    oilNumber: '95#',
+                    oliVal: '1.8',
+                    status: 1,
+                    refuel: false,
+                    close: false
                   }
                 ]
               ]
             },
-
             {
-              name: '3号',
+              number: '3',
               length: 8,
               children: [
                 [
-                  [
-                    {
-                      name: '11枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                    {
-                      name: '12枪',
-                      oliType: '95#',
-                      oliVal: '1.8',
-                      type: 1
-                    }
-                  ],
-                  [
-                    {
-                      name: '13枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                    {
-                      name: '14枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                  ]
-                ],
-                [
-                  [
-                    {
-                      name: '15枪',
-                      oliType: '98#',
-                      oliVal: '1.5',
-                      type: 1
-                    },
-                    {
-                      name: '16枪',
-                      oliType: '92#',
-                      oliVal: '1.1',
-                      type: 0
-                    },
-                  ],
-                  [
-                    {
-                      name: '17枪',
-                      oliType: '98#',
-                      oliVal: '1.5',
-                      type: 1
-                    },
-                    {
-                      name: '18枪',
-                      oliType: '98#',
-                      oliVal: '1.5',
-                      type: 0
-                    }
-                  ]
-                ]
-              ]
-            },
-            {
-              name: '2号',
-              length: 6,
-              children: [
-                [
                   {
-                    name: '05枪',
-                    oliType: '92#',
+                    number: '11枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 3
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '06枪',
-                    oliType: '95#',
+                    number: '12枪',
+                    oilNumber: '95#',
                     oliVal: '1.8',
-                    type: 1
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '07枪',
-                    oliType: '92#',
+                    number: '13枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                 ],
                 [
                   {
-                    name: '08枪',
-                    oliType: '98#',
+                    number: '15枪',
+                    oilNumber: '98#',
                     oliVal: '1.5',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '09枪',
-                    oliType: '92#',
+                    number: '16枪',
+                    oilNumber: '92#',
                     oliVal: '1.1',
-                    type: 0
+                    status: 1,
+                    refuel: false,
+                    close: false
                   },
                   {
-                    name: '04枪',
-                    oliType: '98#',
-                    oliVal: '1.5',
-                    type: 0
-                  }
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
+                  {
+                    number: '13枪',
+                    oilNumber: '92#',
+                    oliVal: '1.1',
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  },
                 ]
               ]
             },
-          ],
+          ]
         ],
-        tankList: [
-          {
-            name: '01',
-            value: '50'
-          },
-          {
-            name: '02',
-            value: '20'
-          },
-          {
-            name: '03',
-            value: '80'
-          }
-        ]
+        param: {
+          gasStationId: ''
+        },
+        dataStastic: {
+          time: 0,
+          number: 0,
+          average: 0
+        },
+        basicData: {
+          tankerCount: 0,
+          nozzleCount: 0,
+          oilTankCount: 0
+        },
+        pieData: [],
+        pieTotal: 0,
+        alarmList: [],
+        alarmTotal: 0,
+        oliTankMax: [-300,300],
+        oliTankMin: [-50,50],
+        gasRange: [0.9, 1.3],
+        gasContent: 25,
+        tankList: [],
+        tankInfo:[],
+        statusList: [],
+        tankLineData: [],
+        websock: null,
+        mytimer: null,
+        allTime: 120000,
+        nozzleTime: 10000
       }
     },
     mounted () {
       let vm = this
       vm.$nextTick(function () {
-        vm.drawPie('oliTypeBox')
-        vm.drawBar('alarmBox')
-        vm.drawGauge('gaugeBox')
-        vm.drawLine('lineBox')
-        vm.drawFour('fourGauge')
-        vm.drawLine1('pressureBox')
+        vm.drawPie('oliTypeBox', vm.pieData, vm.pieTotal)
+        vm.drawBar('alarmBox', vm.alarmList, vm.alarmTypeList)
+        vm.drawGauge('gaugeBox', vm.nozzleObj.oilValue)
+        vm.drawLine('lineBox', vm.nozzleObj.list)
+        vm.drawFour('fourGauge', vm.tankInfo, vm.conType)
+        vm.drawLine1('pressureBox', vm.tankLineData)
       })
     },
     methods: {
+      oliTankColor (status) {
+        if (status === 1) {
+          return 'oliQuantity oliG'
+        } else if (status === 2) {
+          return 'oliQuantity oliH'
+        } else if (status === 3) {
+          return 'oliQuantity oliY'
+        } else {
+          return 'oliQuantity oliR'
+        }
+      },
+      oliTankBackground (status, type) {
+        let name = ''
+        if (type === 0) {
+          name = 'oliTank'
+        } else {
+          name = 'olinum'
+        }
+        if (status === 1) {
+          return name + ' tankG'
+        } else if (status === 2) {
+          return name + ' tankH'
+        } else if (status === 3) {
+          return name + ' tankY'
+        } else {
+          return name + ' tankR'
+        }
+      },
+      iconImage (status, type) {
+        let name = ''
+        if (type === 0) {
+          name = 'guanya'
+        } else {
+          name = 'celou'
+        }
+        if (status === 1) {
+          return this[name + 'G']
+        } else if (status === 2) {
+          return this[name + 'H']
+        } else if (status === 3) {
+          return this[name + 'Y']
+        } else {
+          return this[name + 'R']
+        }
+      },
+      textColor (status) {
+        if (status === 1) {
+          return 'color: #74FFA7'
+        } else if (status === 2) {
+          return 'color: #7E7E7E'
+        } else if (status === 3) {
+          return 'color: #FFCF74'
+        } else {
+          return 'color: #FF4040'
+        }
+      },
       // 圆环
-      drawPie (id,edata) {
+      drawPie (id,edata,total) {
         let vm = this
         if (document.getElementById(id) === null) {
           return false
@@ -546,6 +807,10 @@
         let _chart = {}
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
+        for (let i = 0; i < edata.length; i++) {
+          edata[i].pos = [15+35*i + '%', '50%']
+          edata[i].value = edata[i].value === null ? 0 : edata[i].value
+        }
         var dataStyle = {
           normal: {
             labelLine: {
@@ -553,33 +818,19 @@
             }
           }
         }
-        let data = [
-          {
-            pos: ['15%', '50%'],
-            value: 25
-          },
-          {
-            pos: ['50%', '50%'],
-            value: 25
-          },
-          {
-            pos: ['85%', '50%'],
-            value: 25
-          }
-        ]
         let option = {
           series: (function () {
             let result = []
-            data.forEach(function (item) {
+            edata.forEach(function (item) {
               result.push({
                 name: '第一个圆环',
                 type: 'pie',
-                radius: [30, 40],
+                radius: [35, 45],
                 hoverAnimation: false,
                 center: item.pos,
                 itemStyle: dataStyle,
                 data: [{
-                  value: 25,
+                  value: item.value,
                   label: {
                     normal: {
                       formatter: function(params){
@@ -588,7 +839,7 @@
                       position: 'center',
                       show: true,
                       textStyle: {
-                        fontSize: '24',
+                        fontSize: '18',
                         fontWeight: 'normal',
                         color: '#8AFFF5'
                       }
@@ -600,7 +851,7 @@
                     }
                   }
                 }, {
-                  value: 75,
+                  value: total - item.value,
                   itemStyle: {
                     normal: {
                       color: '#555349'
@@ -615,7 +866,7 @@
         vm['chart'][id].setOption(option)
       },
       // 柱状图
-      drawBar (id,edata) {
+      drawBar (id,edata,alarmTypeList) {
         let vm = this
         if (document.getElementById(id) === null) {
           return false
@@ -623,14 +874,8 @@
         let _chart = {}
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
-        var xdata = ['气液比', '油罐压力', '油气浓度'];
-        let colorList = ['#8531E2', '#EB3B3B', '#F18B4D']
-        let data = [
-          [60, 85, 110],
-          [60, 85, 110],
-          [60, 85, 110]
-        ]
-        let nameList = ['告警', '报警', '预警']
+        let colorList = ['#F18B4D','#EB3B3B']
+        let nameList = ['预警','报警']
         let option = {
           tooltip: {
             trigger: "item",
@@ -639,16 +884,16 @@
           legend: {
             data: nameList,
             x: 'center',
-            y: -5,
+            y: '15',
             textStyle: {
-              color: "#fff"
+              color: "#80DAFF"
             },
             itemWidth: 12,
             itemHeight: 10,
           },
           grid: {
             left: "5%",
-            top: "10%",
+            top: "30%",
             bottom: "10%",
             right: "5%",
             containLabel: true
@@ -660,7 +905,7 @@
             fontSize: 14
           },
           xAxis: {
-            data: xdata,
+            data: alarmTypeList,
             type: 'category',
             splitLine: {
               show: false
@@ -673,15 +918,18 @@
             },
             axisLabel: {
               color: '#74CFFF',
-              fontSize: 14
+              fontSize: 12,
+              interval:0
             }
           },
           yAxis: {
+            min: vm.isLimit === true ? 0 : 2,
             type: 'value',
+            minInterval: 1,
             splitLine: {
               show: true,
               lineStyle: {
-                color: '#74CFFF'
+                color: 'rgba(116, 207, 255, 0.3)'
               }
             },
             axisLine: {
@@ -697,13 +945,13 @@
           },
           series: (function () {
             let result = []
-            data.forEach(function (item,index) {
+            edata.forEach(function (item,index) {
               result.push(
                 {
                   name: nameList[index],
                   type: 'bar',
                   animation: false,
-                  barWidth: 14,
+                  barWidth: 11,
                   data: item,
                   tooltip: {
                     show: false
@@ -729,18 +977,28 @@
         let _chart = {}
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
-        var edata = 1.1;
-        let colorList = []
-        let total = Math.abs(0) + Math.abs(2.6)
-        let start = Math.abs(Math.abs(vm.gasRange[0]) - 0)/total
-        colorList.splice(0,0,[start, '#FE876C'])
-        colorList.splice(1,0,[start + (Math.abs(vm.gasRange[1]-vm.gasRange[0])/total), '#55CEA2'])
-        colorList.splice(2,0,[1, '#FE876C'])
+        let start = (vm.gasRange[0]/2.6)
+        let middle = (vm.gasRange[1] - vm.gasRange[0])/2.6
+        let colorList =  [
+          {
+            offset: 0,
+            color: '#FF5050' // 0% 处的颜色
+          },
+          {
+            offset: start.toFixed(2) - 0.08,
+            color: '#FFC22F' // 0% 处的颜色
+          },
+          {
+            offset: (start + middle).toFixed(2) - 0.08,
+            color: '#4CE398' // 100% 处的颜色
+          },
+          {
+            offset: 1,
+            color: '#FF5050' // 100% 处的颜色
+          }]
         // 文字颜色
         let textColor = ''
-        if (edata > 0 && edata.value < vm.gasRange[0]) {
-          textColor = '#FE876C'
-        } else if (edata >= vm.gasRange[0] && edata <= vm.gasRange[1]) {
+        if (edata >= vm.gasRange[0] && edata <= vm.gasRange[1]) {
           textColor = '#55CEA2'
         } else {
           textColor = '#FE876C'
@@ -753,12 +1011,62 @@
           },
           series: [
             {
+              //渐变圆环
+              name: "",
+              type: "pie",
+              radius: ["70%", "88%"],
+              center: ['50%', '70%'],
+              startAngle: 0,
+              hoverAnimation: false,
+              avoidLabelOverlap: true,
+              z: 0,
+              zlevel: 0,
+              label: {
+                show: false,
+                normal: {show: false}
+              },
+              data: [{
+                value: 270,
+                itemStyle: {
+                  normal: {
+                    color: "rgba(80,150,224,0)"
+                  }
+                }
+              },
+                {
+                  value: 270,
+                  itemStyle: {
+                    normal: {
+                      color: {
+                        x: 0,
+                        y: 0,
+                        x2: 1,
+                        y2: 0,
+                        colorStops: colorList,
+                        globalCoord: false
+                      }
+                    }
+                  }
+
+                },
+                {
+                  value: 0,
+                  itemStyle: {
+                    normal: {
+                      color: "rgba(80,150,224,0)"
+                    }
+                  }
+                },
+
+              ]
+            },
+            {
               startAngle: 180,
               endAngle: 0,
               name: '中心圆',
-              type: 'gauge',
-              center: ['50%', '73%'], // 默认全局居中
+              type: 'gauge', // 默认全局居中
               radius:28,
+              center: ['50%', '70%'],
               splitNumber: 0,
               axisLabel: {
                 show: false
@@ -781,54 +1089,63 @@
                 show: false
               },
 
-            }, {
-              name: '信用分',
-              type: 'gauge',
-              startAngle:180,
+            },
+            {
+              //仪表盘样式
+              name: "",
+              type: "gauge",
+              radius:65,
+              center: ['50%', '70%'],
+              startAngle: 180,
               endAngle: 0,
-              radius: 90,
-              center: ['50%', '73%'], // 默认全局居中
+              clockwise:true,
               min: 0,
               max:2.6,
               splitNumber: 13, //刻度数量
-              axisLine: {
-                show: true,
-                lineStyle: {
-                  width:14,
-                  shadowBlur: 0,
-                  color: colorList
-                }
-              },
+              hoverAnimation: true,
               axisTick: {
-                show: false,
+                show: false
               },
               splitLine: {
-                show: true,
-                length: 62,
+                length: 37,
                 lineStyle: {
-                  color: 'rgba(255,255,255,0.4)',
-                  width: 1
+                  width: 1,
+                  color: "rgba(255,255,255,0.4)"
                 }
               },
               axisLabel: {
                 show:true,
                 color: '#74CFFF',
                 //   标签与刻度线的距离
-                distance: -82
+                distance: -60
+              },
+              axisLine: {
+                lineStyle: {
+                  opacity:0
+                }
               },
               pointer: {
                 show: true,
                 length: '85%',
-                width:6,
+                width:4,
                 position: ['50%', '30%']
               },
               detail: {
                 show:true,
-                offsetCenter: [0, '18%'],
+                offsetCenter: [0, '30%'],
                 textStyle: {
                   fontSize: 18,
                   color: textColor
-                }
+                },
+                // formatter: function (params) {
+                //   if (!isNaN(params)) {
+                //     return [
+                //       params
+                //     ].join('\n')
+                //   } else {
+                //     return '--'
+                //   }
+                // },
               },
               //   指针样式
               itemStyle: {
@@ -837,14 +1154,15 @@
                 }
               },
               data: [{
-                name: "",
-                value: edata
+                value: edata === null ? 0 : edata,
+                name: ""
               }]
-            }]
+            },
+          ]
         }
         vm['chart'][id].setOption(option)
       },
-      getDate (AddDayCount) {
+      getTime (AddDayCount) {
         var dd = new Date();
         dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期
         var y = dd.getFullYear();
@@ -853,7 +1171,7 @@
         return y+'/'+(m<10?'0'+m:m)+'/'+(d<10?'0'+d:d);
       },
       // 折线图
-      drawLine (id) {
+      drawLine (id, edata) {
         let vm = this
         if (document.getElementById(id) === null) {
           return false
@@ -861,17 +1179,17 @@
         let _chart = {}
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
-        let toady = vm.getDate(0) + ' 00:00:00'
-        let tommow = vm.getDate(1) + ' 00:00:00'
+        let toady = vm.getTime(0) + ' 00:00:00'
+        let tommow = vm.getTime(1) + ' 00:00:00'
         var anchor = [
           {name: toady, value:[toady, 0]},
           {name:tommow, value:[tommow, 0]}
         ]
-        let data = [
-          {name:'2019/06/05 6:38:08', value:['2019/06/05 6:38:08', 80]},
-          {name:'2019/06/05 8:18:18', value:['2019/06/05 8:18:18', 60]},
-          {name:'2019/06/05 9:18:18', value:['2019/06/05 9:18:18', 90]}
-        ]
+        // let data = [
+        //   {name:'2019/06/11 6:38:08', value:['2019/06/11 6:38:08', 80]},
+        //   {name:'2019/06/11 8:18:18', value:['2019/06/11 8:18:18', 60]},
+        //   {name:'2019/06/11 9:18:18', value:['2019/06/11 9:18:18', 90]}
+        // ]
         let option = {
           tooltip: {
             trigger: 'axis',
@@ -893,14 +1211,14 @@
             },
           },
           grid: {
-            bottom: '10%',
+            bottom: '9%',
             top: '20%',
             left: '10%',
             right: '10%'
           },
           title: {
             left: 'center',
-            text: '气液比实时监控数据',
+            text: '气液比今日监控数据',
             textStyle: {
               color: '#80DAFF',
               fontSize: 18
@@ -960,7 +1278,7 @@
             {
               name:'气液比',
               type:'line',
-              symbol: 'none',
+              symbol: 'emptyCircle',
               itemStyle: {
                 normal: {
                   color: '#eb2123'
@@ -986,7 +1304,7 @@
                   }])
                 }
               },
-              data: data
+              data: edata
             },
             {
               name:'.anchor',
@@ -998,13 +1316,15 @@
             }]
         }
         vm['chart'][id].setOption(option)
-        vm['chart'][id].dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: data.length - 1
-        })
+        if (edata.length !== 0) {
+          vm['chart'][id].dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: edata.length - 1
+          })
+        }
       },
-      drawFour (id,edata) {
+      drawFour (id,edata, type) {
         let vm = this
         if (document.getElementById(id) === null) {
           return false
@@ -1013,96 +1333,114 @@
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
         let colorList = []
-        let demodata = [
-          {
-            name: '油罐压力',
-            value: -100,
-            unit: 'pa',
-            pos: ['15%', '50%'],
-            range: [-1500, 1000],
+        let nameList = ['管道压力', '油气浓度', '环境温度']
+        let unitList = ['pa', '', '℃']
+        let rangeList = [[-1000, 1000], [0, 100],[-50, 70]]
+        let splitList = [1000, 100, 50]
+        let data = []
+        if (type === 1) {
+          rangeList[1] = [0, 10000]
+          splitList[1] = 10000
+          unitList[1] = 'ppm'
+        } else if (type === 2) {
+          rangeList[1] = [0, 100]
+          splitList[1] = 100
+          unitList[1] = '%LEL'
+        }
+        for (let i = 0; i < edata.length; i++) {
+          let s = {
+            name: nameList[i],
+            value: edata[i],
+            pos: [i * 34 + 17 + '%', '58%'],
+            range: rangeList[i],
+            unit: unitList[i],
+            splitNum: splitList[i],
             color: [
-              [1, '#FE876C']
-            ]
-          },
-          {
-            name: '侧漏压力',
-            value: -60,
-            unit: 'pa',
-            pos: ['40%', '50%'],
-            range: [-100, 0],
-            color: [
-              [1, '#FE876C']
-            ]
-          },
-          {
-            name: '油气浓度',
-            value: 100,
-            unit: 'g/m³',
-            pos: ['65%', '50%'],
-            range: [0, 200],
-            color: [
-              [0.125, '#55CEA2'],
-              [1, '#FE876C']
-            ]
-            // <=25
-          },
-          {
-            name: '油罐温度',
-            value: -30,
-            unit: '℃',
-            pos: ['90%', '50%'],
-            range: [-100, 100],
-            color: [
-              [0.25, '#FE876C'],
-              [0.85, '#55CEA2'],
-              [1, '#FE876C']
-            ]
-            // -50~70
+              {
+                offset: 0,
+                color: '#FFC22F' // 100% 处的颜色
+              },
+              {
+                offset: 0.3,
+                color: '#4CE398' // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: '#FF5050' // 100% 处的颜色
+              },]
           }
-        ]
+          data.push(s)
+        }
         let s = ''
-        for(let i = 0; i < demodata.length; i++){
-          if (demodata[i].name === '油罐温度') {
-            s = demodata[i].value < -50 ? '#FE876C' : demodata[i].value >= -50 && demodata[i].value <= 70 ? '#55CEA2' : '#FE876C'
-            colorList.splice(3, 0, s)
-          } else if (demodata[i].name === '油气浓度') {
-            s = demodata[i].value <= 25 ? '#55CEA2' : '#FE876C'
+        let offset = {}
+        for(let i = 0; i < data.length; i++){
+          if (data[i].name === '环境温度') {
+            s = '#4CE398'
+            // s = data[i].value !== null && data[i].value >= -50 && data[i].value <= 70 ? '#4CE398' : '#FF5050'
             colorList.splice(2, 0, s)
-          } else if (demodata[i].name === '侧漏压力') {
-            let total = Math.abs(-100) + Math.abs(0)
-            let start = Math.abs(100 - Math.abs(vm.sideRange[0]))/total
-            demodata[i].color.splice(0,0,[start, '#FE876C'])
-            demodata[i].color.splice(1,0,[start + (Math.abs(vm.sideRange[1]-vm.sideRange[0])/total), '#55CEA2'])
-            // 文字颜色
-            if (demodata[i].value > -100 && demodata[i].value < vm.sideRange[0]) {
-              s = '#FE876C'
-            } else if (demodata[i].value >= vm.sideRange[0] && demodata[i].value <= vm.sideRange[1]) {
-              s = '#55CEA2'
-            } else {
-              s = '#FE876C'
-            }
+          } else if (data[i].name === '油气浓度') {
+            s = (data[i].value <= vm.gasContent && data[i].value !== null) ? '#4CE398' : '#FF5050'
             colorList.splice(1, 0, s)
-          } else if (demodata[i].name === '油罐压力') {
-            let total = Math.abs(-1500) + Math.abs(1000)
-            let start = Math.abs(Math.abs(-1500) - Math.abs(vm.oliTankRange[0]))/total
-            demodata[i].color.splice(0,0,[start, '#FE876C'])
-            let middle = Math.abs(Math.abs(-50) - Math.abs(vm.oliTankRange[0]))/total
-            demodata[i].color.splice(1,0,[start + middle, '#55CEA2'])
-            let middle1 = Math.abs(Math.abs(50) - (-50))/total
-            demodata[i].color.splice(2,0,[start + middle + middle1, '#FE876C'])
-            let middle2 = Math.abs(vm.oliTankRange[1] - 50)/total
-            demodata[i].color.splice(3,0,[start + middle + middle1 + middle2, '#55CEA2'])
+            data[i].color[0] = {
+              offset: 0,
+              color: '#4CE398'
+            }
+            offset = {
+              offset: vm.gasContent/data[i].range[1],
+              color: '#FFC22F'
+            }
+            data[i].color[1] = offset
+            data[i].color[2] = {
+              offset: 1,
+              color: '#FF5050'
+            }
+          } else if (data[i].name === '管道压力') {
+            // data[i].color = [
+            //   {
+            //     offset: 0,
+            //     color: '#4CE398' // 100% 处的颜色
+            //   },
+            //   {
+            //     offset: 0.3,
+            //     color: '#FFC22F' // 0% 处的颜色
+            //   },
+            //   {
+            //     offset: 1,
+            //     color: '#FF5050' // 100% 处的颜色
+            //   },]
+            let total = Math.abs(-1000-1000)
+            let start = Math.abs(-1000 - vm.oliTankMax[0])/total
+            data[i].color[0] = {
+              offset: 0,
+              color: '#FF5050'
+            }
+            offset = {
+              offset: start,
+              color: '#4CE398'
+            }
+            data[i].color[1] = offset
+            let middle = Math.abs(vm.oliTankMin[0] - vm.oliTankMax[0])/total
+            offset = {
+              offset: (start + middle) + 0.05,
+              color: '#FF5050'
+            }
+            data[i].color[2] = offset
+            let middle1 = Math.abs(vm.oliTankMin[1] - vm.oliTankMin[0])/total
+            offset = {
+              offset: (start + middle + middle1) + 0.05,
+              color: '#4CE398'
+            }
+            data[i].color[3] = offset
+            data[i].color[4] = {
+              offset: 1,
+              color: '#FF5050'
+            }
             // 文字颜色
-            if (demodata[i].value > -1500 && demodata[i].value < vm.oliTankRange[0]) {
-              s = '#FE876C'
-            } else if (demodata[i].value >= vm.oliTankRange[0] && demodata[i].value <= -50) {
-              s = '#55CEA2'
-            } else if (demodata[i].value > -50 && demodata[i].value < 50) {
-              s = '#FE876C'
-            } else if (demodata[i].value >= 50 && demodata[i].value <= vm.oliTankRange[1]) {
-              s = '#55CEA2'
+            // s = '#4CE398'
+            if (data[i].value !== null && (data[i].value >= vm.oliTankMax[0] && data[i].value <= vm.oliTankMin[0] || data[i].value >= vm.oliTankMin[1] && data[i].value <= vm.oliTankMax[1])) {
+              s = '#4CE398'
             } else {
-              s = '#FE876C'
+              s = '#FF5050'
             }
             colorList.splice(0, 0, s)
           }
@@ -1115,20 +1453,71 @@
           },
           series:( function () {
             let result = []
-            demodata.forEach(function (item, index) {
-              result.push({
+            data.forEach(function (item, index) {
+              result.push(
+                {
+                  //渐变圆环
+                  name: "",
+                  type: "pie",
+                  radius: ["85%", "100%"],
+                  center: item.pos,
+                  startAngle: 0,
+                  hoverAnimation: false,
+                  avoidLabelOverlap: true,
+                  z: 0,
+                  zlevel: 0,
+                  label: {
+                    show: false,
+                    normal: {show: false}
+                  },
+                  data: [{
+                    value: 270,
+                    itemStyle: {
+                      normal: {
+                        color: "rgba(80,150,224,0)"
+                      }
+                    }
+                  },
+                    {
+                      value: 270,
+                      itemStyle: {
+                        normal: {
+                          color: {
+                            x: 0,
+                            y: 0,
+                            x2: 1,
+                            y2: 0,
+                            colorStops: item.color,
+                            globalCoord: false
+                          }
+                        }
+                      }
+
+                    },
+                    {
+                      value: 0,
+                      itemStyle: {
+                        normal: {
+                          color: "rgba(80,150,224,0)"
+                        }
+                      }
+                    },
+
+                  ]
+                },
+                {
                   startAngle: 180,
                   endAngle: 0,
                   name: '中心圆',
                   type: 'gauge',
-                  center: [item.pos[0], '50%'], // 默认全局居中
-                  radius:20,
-                  splitNumber: 0,
+                  splitNumber: 0, //刻度数量
+                  radius:24,
+                  center: [item.pos[0], '60%'], // 默认全局居中
                   axisLabel: {
                     show: false
                   },
                   splitLine: { // 分隔线
-                    length: 10, // 属性length控制线长
+                    length: 8, // 属性length控制线长
                     lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
                       width: 0
                     }
@@ -1151,16 +1540,13 @@
                   type: 'gauge',
                   startAngle:180,
                   endAngle: 0,
-                  radius: 50,
+                  radius:59,
                   center: item.pos, // 默认全局居中
                   min: item.range[0],
                   max:item.range[1],
                   axisLine: {
-                    show: true,
                     lineStyle: {
-                      width:10,
-                      shadowBlur: 0,
-                      color: item.color
+                      opacity:0
                     }
                   },
                   axisTick: {
@@ -1168,14 +1554,22 @@
                   },
                   splitLine: {
                     show: true,
-                    length: 30, //轴线长度
+                    length: 36, //轴线长度
                     lineStyle: {
                       color: 'rgba(255,255,255,0.4)',
                       width: 1
                     }
                   },
                   axisLabel: {
-                    show:false
+                    show:true,
+                    color: '#74CFFF',
+                    //   标签与刻度线的距离
+                    distance: index === 0 ? -70 : index === 1 && type === 1 ? -55 : -60,
+                    formatter:function(param){
+                      if (param % splitList[index] === 0 || param % splitList[index] === 1 || (param % splitList[index] === 20 && index === 2)) {
+                        return param
+                      }
+                    }
                   },
                   pointer: {
                     show: true,
@@ -1183,15 +1577,21 @@
                     width:3
                   },
                   detail: {
-                    show:true,
-                    offsetCenter: [0, '65%'],
+                    show: true,
+                    offsetCenter: [0, '40%'],
                     textStyle: {
                       fontSize: 14,
                       color: colorList[index]
                     },
-                    formatter: [
-                      '{value}'+(item.unit || ''), '\n{name|' + item.name + '}'
-                    ].join('\n'),
+                    formatter: function (params) {
+                      if (!isNaN(params)) {
+                        return [
+                          params +(item.unit || '')
+                        ].join('\n')
+                      } else {
+                        return '--'
+                      }
+                    },
                     rich: {
                       name: {
                         fontSize: 16,
@@ -1218,7 +1618,7 @@
         vm['chart'][id].setOption(option)
       },
       // 油罐压力
-      drawLine1 (id) {
+      drawLine1 (id,edata, nameList) {
         let vm = this
         if (document.getElementById(id) === null) {
           return false
@@ -1226,22 +1626,18 @@
         let _chart = {}
         _chart[id] = echarts.init(document.getElementById(id))
         vm.chart = Object.assign({}, vm.chart, _chart)
-        let toady = vm.getDate(0) + ' 00:00:00'
-        let tommow = vm.getDate(1) + ' 00:00:00'
+        let colrList = ['#FF0404', '#47FFAC', '#FFE164', '#8531E2']
+        let toady = vm.getTime(0) + ' 00:00:00'
+        let tommow = vm.getTime(1) + ' 00:00:00'
         var anchor = [
           {name: toady, value:[toady, 0]},
           {name:tommow, value:[tommow, 0]}
         ]
-        var data = [
-          {name:'2019/06/04 6:38:08', value:['2019/06/04 6:38:08', 80]},
-          {name:'2019/06/04 10:18:18', value:['2019/06/04 10:18:18', 60]},
-          {name:'2019/06/04 14:18:18', value:['2019/06/04 14:18:18', 90]}
-        ]
-        var data1 = [
-          {name:'2019/06/04 6:38:08', value:['2019/06/04 6:38:08', 30]},
-          {name:'2019/06/04 10:18:18', value:['2019/06/04 10:18:18', 80]},
-          {name:'2019/06/04 14:18:18', value:['2019/06/04 14:18:18', 40]}
-        ]
+        // var data = [
+        //   {name:'2019/06/11 6:38:08', value:['2019/06/11 6:38:08', 80]},
+        //   {name:'2019/06/11 10:18:18', value:['2019/06/11 10:18:18', 60]},
+        //   {name:'2019/06/11 14:18:18', value:['2019/06/11 14:18:18', 90]}
+        // ]
         let option = {
           tooltip: {
             trigger: 'axis',
@@ -1256,9 +1652,27 @@
             borderColor: '#74CFFF',
             borderWidth: 1,
             formatter: function (params) {
-              let time = params[0].name.split(" ")[1]
-              let value = params[0].data.value[1]
-              return time + '<br>' + '油罐压力：' + value+ '<br>' + '侧漏压力：' + params[1].data.value[1]
+              let name =''
+              let time = params[0].data.value[0]
+              let value = 0
+              let result = time + '<br>'
+              for (let i = 0; i < params.length; i++) {
+                if (params[i].seriesName !== '.anchor') {
+                  name =  params[i].data.number +'#罐'
+                  value = params[i].data.value[1]
+                  // result +=  name + '：' + value + ' pa<br>'
+                  if (i < 7) {
+                    result +=  name + '：' + value + ' pa<br>'
+                  } else {
+                    result +=  '...'
+                    return
+                  }
+                }
+              }
+              return result
+              // let time = params[0].name.split(" ")[1]
+              // let value = params[0].data.value[1]
+              // return time + '<br>' + '油罐压力：' + value
             },
           },
           grid: {
@@ -1269,7 +1683,7 @@
           },
           title: {
             left: 'center',
-            text: '压力实时监控数据',
+            text: '油罐压力今日监控数据',
             textStyle: {
               color: '#80DAFF',
               fontSize: 18
@@ -1322,50 +1736,494 @@
             },
             boundaryGap: [0, '100%']
           },
-          series: [
-            {
-              name:'油罐压力',
-              type:'line',
-              symbol: 'emptyCircle',
-              itemStyle: {
-                normal: {
-                  color: '#F747FF'
-                }
-              },
-              data: data
-            },
-            {
-              name:'侧漏压力',
-              type:'line',
-              symbol: 'emptyCircle',
-              itemStyle: {
-                normal: {
-                  color: '#47FFAC'
-                }
-              },
-              data: data1
-            },
-            {
+          series: (function () {
+            let result = []
+            if (edata !== undefined && edata.length !== 0) {
+              edata.forEach((item,index) => {
+                result.push({
+                  name:nameList[index],
+                  type:'line',
+                  symbol: 'emptyCircle',
+                  smooth: true,
+                  itemStyle: {
+                    normal: {
+                      color: colrList[index]
+                    }
+                  },
+                  data:item
+                })
+              })
+            }
+            result.push({
               name:'.anchor',
               type:'line',
               showSymbol:false,
               data:anchor,
               itemStyle:{normal:{opacity:0}},
               lineStyle:{normal:{opacity:0}}
-            }
-          ]
+            })
+            return result
+          })()
         }
         vm['chart'][id].setOption(option)
-        vm['chart'][id].dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: data1.length - 1
-        })
+        if (edata !== null && edata.length !== 0) {
+          vm['chart'][id].dispatchAction({
+            type: 'showTip',
+            seriesIndex: 0,
+            dataIndex: edata.length - 1
+          })
+        }
       },
       logoutMonitor(){
-        this.$router.push({path: '/'})
-      }
+        userLogOut().then((res) => {
+          if (res.data.code === 1000) {
+            sessionStorage.removeItem('station')
+            sessionStorage.removeItem('authorization')
+            window.clearInterval(this.nozzleTimer)
+            window.clearTimeout(this.mytimer)
+            this.nozzleTimer = null
+            this.mytimer = null
+            this.$router.push({path: '/'})
+          } else {
+            this.$Message.error(res.data.message)
+          }
+        })
+      },
+      // 今日数据
+      getTodayData (par) {
+        todayData(par).then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            this.dataStastic = {
+              time: result.time === 0 || result.time === null? 0 : result.time.toFixed(2),
+              number: result.number,
+              average: result.average === 0 || result.average === null ? 0 : result.average.toFixed(2)
+            }
+            this.pieData[0] = {value: result.value92}
+            this.pieData[1] = {value: result.value95}
+            this.pieData[2] = {value: result.value98}
+            this.pieTotal = result.total === null ? 0 : result.total
+          } else {
+            this.dataStastic = {
+              time: 0,
+              number: 0,
+              average: 0
+            }
+            this.pieData[0] = {value: 0}
+            this.pieData[1] = {value: 0}
+            this.pieData[2] = {value: 0}
+            this.pieTotal = 0
+          }
+          this.drawPie('oliTypeBox', this.pieData, this.pieTotal)
+        })
+      },
+      // 油罐信息
+      getOliTank (par) {
+        oliTankMonitor(par).then((res) => {
+          if (res.data.code === 1000) {
+            let even = [], odd = []
+            for (let i = 0; i < res.data.content.length; i++) {
+              if (i % 2 === 0) {
+                even.push(res.data.content[i])
+              } else {
+                odd.push(res.data.content[i])
+              }
+            }
+            let s = {
+              id: -1,
+              name: '',
+              value: '',
+              pressure: '',
+              sidewaysPressure: ''
+            }
+            if (even.length > odd.length && odd.length !== 0) {
+              odd.push(s)
+            } else if (even.length < odd.length && even.length !== 0) {
+              even.push(s)
+            }
+            if (odd.length !== 0) {
+              this.tankList = [even, odd]
+              this.spanVal = 12
+              this.pushVal = 0
+              this.oneSpan = 0
+            } else {
+              this.tankList = [even]
+              this.spanVal = 24
+              this.pushVal = 6
+              this.oneSpan = 12
+            }
+          } else {
+            this.tankList = []
+          }
+        })
+      },
+      // 告警信息
+      getAlarm (par) {
+        this.alarmList= []
+        this.alarmTypeList = []
+        monitorAlarm(par).then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            this.alarmTotal = result.total
+            let s = [], ss = []
+            for (let i = 0; i < result.list.length; i++) {
+              if (result.list[i].earlyWarningCount > 0 || result.list[i].alarmCount > 0) {
+                this.isLimit = true
+              }
+              s.push(result.list[i].earlyWarningCount)
+              this.alarmList[0] = s
+              ss.push(result.list[i].alarmCount)
+              this.alarmList[1] = ss
+              this.alarmTypeList.push(result.list[i].alarmTypeName)
+            }
+          } else {
+            this.alarmList = []
+            this.alarmTotal = 0
+          }
+          this.drawBar('alarmBox', this.alarmList, this.alarmTypeList)
+        })
+      },
+      // 基本信息
+      getBasic (par) {
+        monitorBasic(par).then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            this.basicData = {
+              tankerCount: result.tankerCount,
+              nozzleCount: result.nozzleCount,
+              oilTankCount: result.oilTankCount,
+            }
+            this.tankCount = result.tankers.length
+            // 所有加油枪的id
+            for (let n = 0; n < result.tankers.length; n++) {
+              for (let sn = 0; sn < result.tankers[n].nozzles.length; sn++) {
+                this.nozzleList.push(result.tankers[n].nozzles[sn].id)
+              }
+            }
+            //油枪信息定时器
+            window.clearInterval(this.nozzleTimer)
+            this.nozzleTimer = null
+            if (this.nozzleList.length !== 0) {
+              let thi = this
+              thi.getNozzleDetail(thi.nozzleList[0])
+              let count = 1
+              this.nozzleTimer = setInterval(function () {
+                thi.getNozzleDetail(thi.nozzleList[count % thi.nozzleList.length])
+                count ++
+              },thi.nozzleTime)
+            }
+          //  -----------------------
+            // 一行放置加油机的个数
+            if (result.tankers.length < 5) {
+              this.lineNum = 2
+            } else {
+              this.lineNum = 3
+            }
+            let t = 0
+            let rowNum = result.tankers.length % this.lineNum === 0 ? result.tankers.length/ this.lineNum : Math.ceil(result.tankers.length/ this.lineNum)
+            let finishItem = []
+            for (let i = 0; i < rowNum; i++) {
+              let rowList = [] //每一行
+              for (let j = 0; j < this.lineNum; j++) {
+                if (result.tankers[t] !== undefined) {
+                  rowList[j] = result.tankers[t]
+                  t++
+                }
+                var finArr = []
+                for (let k = 0; k < rowList.length; k++) {
+                  // 将每一个加油机的加油枪数据处理
+                  let s = {
+                    id: rowList[k].id,
+                    number: rowList[k].number,
+                    length: rowList[k].length,
+                    children: []
+                  }
+                  let oddList = [], evenList = []
+                  for (let a = 0; a < rowList[k].nozzles.length; a++) {
+                    if (a % 2 === 0) {
+                      evenList.push(rowList[k].nozzles[a])
+                    } else {
+                      oddList.push(rowList[k].nozzles[a])
+                    }
+                  }
+                  s.children[0] = evenList
+                  s.children[1] = oddList
+                  finArr.push(s)
+                }
+              }
+              finishItem.push(finArr)
+            }
+            this.oliArr = finishItem
+            // 占位
+            if (this.tankCount === 5) {
+              let s = {
+                id: -1,
+                number: 0,
+                length: 0,
+                children: [[
+                  {
+                    status: 1,
+                    refuel: false,
+                    close: false
+                  }
+                ],[{
+                  status: 1,
+                  refuel: false,
+                  close: false
+                }]]
+              }
+              this.oliArr[1].push(s)
+            }
+          } else {
+            this.basicData = {
+              tankerCount: 0,
+              nozzleCount: 0,
+              oilTankCount: 0,
+            }
+            this.oliArr = []
+            this.nozzleList = []
+            this.tankCount = 0
+          }
+        })
+      },
+      // 油枪信息
+      getNozzleDetail (id) {
+        let par = {
+          nozzleId: id
+        }
+        monitorNozzle(par).then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            this.nozzleObj = {
+              tankerNumber: result.tankerNumber,
+              number: result.number,
+              oilNumber: result.oilNumber,
+              oilValue: result.oilValue,
+              oilAverageValue: result.oilAverageValue === 0 ? 0 : result.oilAverageValue === null ? '-' : result.oilAverageValue.toFixed(1),
+              status: result.status,
+              refuel: result.refuel,
+              close: result.close,
+              list: []
+            }
+            // 样式
+            if (result.status === 1) {
+              this.nozzleStatus = 'olitankStatus greenStatus'
+              this.nozzleImage = this.green
+              this.nozzleClass = 'olitankItem greenItem'
+            } else if (result.status === 2) {
+              this.nozzleStatus = 'olitankStatus disStatus'
+              this.nozzleImage = this.dis
+              this.nozzleClass = 'olitankItem disItem'
+            } else if (result.status === 3) {
+              this.nozzleStatus = 'olitankStatus yellowStatus'
+              this.nozzleImage = this.yellow
+              this.nozzleClass = 'olitankItem yellowItem'
+            } else {
+              this.nozzleStatus = 'olitankStatus redStatus'
+              this.nozzleImage = this.red
+              this.nozzleClass = 'olitankItem redItem'
+            }
+            // 折线图数据
+            for (let i = 0; i < result.list.length; i++) {
+              let s = {
+                name: result.list[i].time,
+                value:[result.list[i].time, result.list[i].value]
+              }
+              this.nozzleObj.list[i] = s
+            }
+          } else {
+            this.nozzleObj = {
+              tankerNumber: '',
+              number: '',
+              oilNumber: '',
+              oilValue: 0,
+              oilAverageValue: 0,
+              status: '',
+              refuel: '',
+              list: []
+            }
+          }
+          this.drawGauge('gaugeBox', this.nozzleObj.oilValue)
+          this.drawLine('lineBox', this.nozzleObj.list)
+        })
+      },
+      // 监测信息
+      getTankInfo (par) {
+        this.tankLineData= []
+        let nameList = []
+        monitorTank(par).then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            // 仪表盘数据
+            this.tankInfo = [result.pipePressure, result.concentration, result.temperature]
+            this.conType = result.type
+            this.conStatus = result.concentrationStatus === 4 ? 1 : 0
+            this.statusList = [
+              {
+                name: '管道压力',
+                value: result.pipePressureStatus + ''
+              },
+              {
+                name: '油气浓度',
+                value: result.concentrationStatus + ''
+              },
+              {
+                name: '环境温度',
+                value: result.temperatureStatus + ''
+              }
+            ]
+            // 折线图数据
+            this.tankLineData = result.oilTankDataVOS
+            if (result.list !== null) {
+              for (let i = 0; i < result.oilTankDataVOS.length; i++) {
+               for (let j = 0; j < result.oilTankDataVOS[i].length; j++) {
+                 let s = {
+                   name: result.oilTankDataVOS[i][j].time,
+                   value:[result.oilTankDataVOS[i][j].time, result.oilTankDataVOS[i][j].value],
+                   number: result.oilTankDataVOS[i][j].number
+                 }
+                 this.tankLineData[i][j] = s
+                 nameList.push(result.oilTankDataVOS[i][j].number)
+               }
+              }
+            }
+          } else {
+            this.tankInfo = []
+            this.statusList = []
+            this.tankLineData = []
+            this.conType = 0
+          }
+
+          if (this.onlyFlag) {
+            // 油罐压力、气液比阈值
+            this.getThresold()
+            this.onlyFlag = false
+          }
+          this.drawFour('fourGauge', this.tankInfo, this.conType)
+          this.drawLine1('pressureBox', this.tankLineData, nameList)
+        })
+      },
+      // 油罐压力、气液比阈值
+      getThresold () {
+        monitorThresold().then((res) => {
+          if (res.data.code === 1000) {
+            let result = res.data.content
+            this.gasRange = [result.minAL, result.maxAL]
+            this.oliTankMin = [result.min1Pressure, result.max1Pressure]
+            this.oliTankMax = [result.min2Pressure, result.max2Pressure]
+            for (let i = 0; i < result.maxConcentrationVOS.length; i++) {
+              if (result.maxConcentrationVOS[i].type === this.conType && result.maxConcentrationVOS[i].alarmType === this.conStatus) {
+                this.gasContent = result.maxConcentrationVOS[i].value
+              }
+            }
+          } else {
+            this.gasRange = []
+            this.oliTankMax = []
+            this.oliTankMin = []
+            this.gasContent = 0
+          }
+          this.drawFour('fourGauge', this.tankInfo, this.conType)
+        })
+      },
+      commonInfo (arr, result) {
+        let even = [], odd = []
+        for (let i = 0; i < result.length; i++) {
+          if (i % 2 === 0) {
+            even.push(result[i])
+          } else {
+            odd.push(result[i])
+          }
+        }
+        let s = {
+          id: -1,
+          number: '',
+          status: '',
+          fault: '',
+          alarm: ''
+        }
+        if (even.length > odd.length && odd.length !== 0) {
+          odd.push(s)
+        } else if (even.length < odd.length && even.length !== 0) {
+          even.push(s)
+        }
+        if (odd.length !== 0) {
+          arr = [even, odd]
+          this.justifyVal = 'start'
+          this.spanVal = 12
+        } else {
+          arr = [even]
+          this.justifyVal = 'center'
+          this.spanVal = 24
+        }
+        return arr
+      },
+      // 管线信息
+      getPipe (par) {
+        pipeLine(par).then((res) => {
+          if (res.data.code === 1000) {
+            this.pipeList = this.commonInfo(this.pipeList, res.data.content)
+          } else {
+            this.pipeList = []
+          }
+        })
+      },
+      // 人井信息
+      getPeopleWell (par) {
+        peopleWell(par).then((res) => {
+          if (res.data.code === 1000) {
+            this.peopleWellList = this.commonInfo(this.peopleWellList, res.data.content)
+          } else {
+            this.peopleWellList = []
+          }
+        })
+      },
+      // 油盆信息
+      getoliBasin (par) {
+        oliBasin(par).then((res) => {
+          if (res.data.code === 1000) {
+            this.oliBasinList = this.commonInfo(this.oliBasinList, res.data.content)
+          } else {
+            this.oliBasinList = []
+          }
+        })
+      },
+      // 定时器
+      allTimer () {
+        let thi = this
+        // 今日数据
+        thi.getTodayData(thi.param)
+        // 基本信息
+        thi.getBasic(thi.param)
+        // 油罐信息
+        thi.getOliTank(thi.param)
+        thi.getPipe(thi.param)
+        thi.getPeopleWell(thi.param)
+        thi.getoliBasin(thi.param)
+        // 告警信息
+        thi.getAlarm(thi.param)
+        // 油罐监测
+        thi.getTankInfo(thi.param)
+        thi.mytimer = setTimeout(thi.allTimer, thi.allTime)
+      },
     },
+    created:function () {
+      if (sessionStorage.getItem('station') !== null) {
+        let stations = JSON.parse(sessionStorage.getItem('station'))
+        this.param.gasStationId = stations.stationId
+        this.stationName = stations.stationName
+        this.allTimer()
+      }
+      // this.param.gasStationId = 12
+      // // 油罐压力、气液比阈值
+      // this.getThresold()
+      // this.allTimer()
+    },
+    destroyed () {
+      window.clearInterval(this.nozzleTimer)
+      window.clearTimeout(this.mytimer)
+      this.nozzleTimer = null
+      this.mytimer = null
+    }
   }
 </script>
 
@@ -1373,9 +2231,10 @@
 #body{
   width: 100%;
   height: 100vh;
-  background:#021836;
   color:#80DAFF;
   min-width: 1000px;
+  background:#021836;
+  overflow: auto;
 }
   .titleBar{
     width: 100%;
@@ -1385,11 +2244,20 @@
     color:#72E6FF;
     position: relative;
   }
-  .titleBar>div{
-    text-align: center;
-    line-height: 80px;
+  .titleBar>div:nth-child(1){
+    float: left;
+    margin-top: 7px;
+    margin-left: 20px;
+    font-size: 14px;
+  }
+  .titleBar>div:nth-child(2){
+    position: absolute;
+    left:0;
+    right: 0;
+    margin: auto;
     font-size: 22px;
     letter-spacing: 3px;
+    line-height: 65px;
   }
   .logoutBtn{
     background:rgba(2,24,54,1);
@@ -1401,11 +2269,12 @@
     top:25px;
     color: #87E6FF;
   }
-  .content{
+  #content{
     padding: 0 30px 30px;
     width: 100%;
     /*height:100%;*/
     margin-top: -10px;
+    background:#021836;
     /*background: red;*/
   }
   .oliGunInfo{
@@ -1414,28 +2283,47 @@
     background: url('../../assets/leftTop.png') no-repeat;
     background-size: 100% 100%;
     margin-bottom: 20px;
-    padding: 15px 30px;
+    padding: 15px;
   }
-  .oliGunInfo span{
+  .oliGunInfo>span{
     font-size: 22px;
     color:#8AFFF5;
     margin-left: 5px;
   }
+  .basicText{
+    font-size: 22px;
+    color:#8AFFF5;
+    margin-left: 5px;
+  }
+  .mainCon{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height:450px;
+  }
   .tankImage{
-    width: 73px;height: 108px;
+    /*width: 73px;height: 108px;*/
     margin-top:10px;
     position: relative;
   }
-  .tankLine{
-    position: absolute;
-    width:6px;
-    height: 100px;
-    background:#4046FF;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -8px;
+  .tankImage2{
+    width: 120px;height: 200px;
+  }
+  .tankImage4{
+    width: 100px;height: 160px;
+  }
+  .tankImage6{
+    width: 80px;height: 140px;
+  }
+  .tankBox{
+    background:url('../../assets/rightTank.png') no-repeat;
+    background-size: 99% 100%;
+    height:56vh;
+    padding: 0 5px 10px;
+  }
+  .tankBoxTitle{
+    font-size: 13px;
+    line-height:25px
   }
   .dir2{
     margin-top: -36px;
@@ -1446,6 +2334,10 @@
     margin-left: 14px
   }
   .dir6{
+    margin-top: 6px;
+    margin-left: 14px
+  }
+  .dir8{
     margin-top: 6px;
     margin-left: 14px
   }
@@ -1461,12 +2353,9 @@
     margin-top: 6px;
     margin-left: -14px
   }
-  .eightOli{
-    float: right;
-    margin-left:40px;
-  }
-  .eightBox>.eightOli:last-child{
-    margin-left: 30px;
+  .dir7{
+    margin-top: 6px;
+    margin-left: 14px
   }
   /*油枪数量为2且方向为4*/
   .dir23{
@@ -1480,12 +2369,21 @@
   .tankName{
     position: absolute;
     text-align: center;
-    bottom:15px;
+    /*bottom:15px;*/
     left:0;
     right:0;
     margin-right:auto;
     margin-left:auto;
     color:#6DD3FF
+  }
+  .tankName2{
+    bottom:50px;
+  }
+  .tankName4{
+    bottom:30px;
+  }
+  .tankName6{
+    bottom:15px;
   }
   /*一行加油机*/
   .itemLine{
@@ -1493,45 +2391,50 @@
     justify-content: space-between;
     margin-top: 43px;
   }
-  .oliItem>.itemLine:last-child .tankLine{
-    height: 70px;
-  }
-  .oliBox{
-    height:120px;
-    background:rgba(0,63,123,0.3);
-    border-radius:12px;
-    margin-top: 10px;
-    padding:0 118px 0 128px;
-  }
-  .contactLine{
-    width:100%;
-    height:12px;
-    background:#4046FF;
-  }
   /*油罐*/
   .oliTank{
-    width:206px;
-    height:70px;
-    border: 4px solid transparent;
-    background:rgba(56,120,219,0.3);
-    box-shadow:0px 1px 32px 0px rgba(0,37,60,0.5);
+    width:100px;
+    height:40px;
+    border: 2px solid transparent;
     border-radius:51px;
     position: relative;
     overflow: hidden;
   }
+  .tankG{
+    background:rgba(56,120,219,0.3);
+    box-shadow:0px 1px 32px 0px rgba(9,164,255,1) inset;
+  }
+    .tankH{
+      box-shadow:0px 1px 32px 0px rgba(112,112,112,1) inset;
+    }
+    .tankY{
+      box-shadow:0px 1px 32px 0px rgba(255,207,116,1) inset;
+    }
+    .tankR{
+      box-shadow:0px 1px 32px 0px rgba(255,64,64,1) inset;
+    }
   .olinum{
-    width:28px;
-    height:24px;
+    width:30px;
+    height:8px;
     line-height: 24px;
-    background:#4046FF;
     color:#74CFFF;
     font-size: 14px;
     position: absolute;
-    top:-24px;
-    left:0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
+    top:-8px;
+    left:20px;
+    border-radius:2px 2px 0px 0px;
+  }
+  .oliTankInfo{
+    /*margin-top: 5px;*/
+    color:#74FFA7;
+  }
+  .oliTankInfo>img{
+    width:18px;
+    height: 14px;
+  }
+  .oliTankInfo span{
+    font-size: 13px;
+    /*margin-left: 3px;*/
   }
   /*油量*/
   .oliQuantity{
@@ -1540,23 +2443,43 @@
     left: 0;
     bottom:0;
   }
-  .oliTank > .quantityNum{
+  .oliG {
+    background:#00A5FF;
+  }
+  .oliH {
+    background:#7E7E7E;
+  }
+  .oliY {
+    background:#FFCF74;
+  }
+  .oliR {
+    background:#FF4040;
+  }
+  .numQuantity{
+    font-size: 14px;
     position: absolute;
+    top:8px;
     left: 0;
     right: 0;
-    top:15px;
-    margin: auto;
-    z-index:2;
-    color: #0A2144;
+    margin:auto;
+    z-index: 2;
   }
-  .many{
-    background:#3878DB;
+  .leakImage{
+    width: 18px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top:-3px;
   }
-  .orange{
-    background: #FF8F3E;
-  }
-  .warning{
-    background:#EB5656;
+  .equipImage{
+    width: 16px;
+    height: 17px;
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom: 0;
+    margin: auto
   }
   /*左下侧*/
   .leftBottom{
@@ -1574,11 +2497,11 @@
   }
   #oliTypeBox{
     width:100%;
-    height: 9vh;
+    height: 10vh;
   }
   #alarmBox{
-    width:100%;
-    height: 20vh;
+    width:90%;
+    height: 100%;
   }
   .oliGunDetail{
     /*width: 600px;*/
@@ -1617,7 +2540,7 @@
     line-height: 25px;
     border-radius: 16px;
     font-size: 14px;
-    margin-left: 25px;
+    float: right;
   }
   .greenStatus{
     color: #6EFFA4;
@@ -1639,6 +2562,12 @@
     color: #74CFFF;
     border: 1px solid #74CFFF;
   }
+  .gaugeTitle{
+    margin-right: 10px;
+    line-height: 24px;
+    font-size: 16px;
+    color: #74CFFF
+  }
   .gasLiquid{
     color:#98E0FF;
     margin-left:5px;
@@ -1655,7 +2584,7 @@
   }
   #fourGauge{
     width: 100%;
-    height: 14vh;
+    height: 13vh;
     margin-top: -20px;
   }
   #pressureBox{
