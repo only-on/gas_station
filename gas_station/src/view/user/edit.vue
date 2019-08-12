@@ -4,11 +4,11 @@
       <Button class="btn-system" @click="back" style="float: right;">返回</Button>
       <div class="layout-content-form">
         <Form :model="formDates" :label-width="150" ref="formDates">
-          <Row type="flex">
-            <FormItem label="用户昵称" class="selfValidate">
-              <Input  v-model="formDates.petName" style="width: 300px;float: left" placeholder="用户昵称" ></Input><br>
-            </FormItem>
-          </Row>
+          <!--<Row type="flex">-->
+            <!--<FormItem label="用户昵称" class="selfValidate">-->
+              <!--<Input  v-model="formDates.petName" style="width: 300px;float: left" placeholder="用户昵称" ></Input><br>-->
+            <!--</FormItem>-->
+          <!--</Row>-->
           <Row type="flex">
             <FormItem label="真实姓名" class="selfValidate">
               <Input  v-model="formDates.name" style="width: 300px;float: left" placeholder="真实姓名" ></Input><br>
@@ -136,10 +136,11 @@
         }
       },
       submitVal (formDates) {
-        if (formDates.petName.trim().length === 0) {
-          this.$Message.error('昵称不能为空！')
-          return false
-        } else if (formDates.name.trim().length === 0) {
+        // if (formDates.petName.trim().length === 0) {
+        //   this.$Message.error('昵称不能为空！')
+        //   return false
+        // } else
+        if (formDates.name.trim().length === 0) {
           this.$Message.error('真实姓名不能为空！')
           return false
         } else if (formDates.name.trim().length > 255) {
@@ -202,7 +203,7 @@
                 gasStationId: JSON.parse(sessionStorage.getItem('station')).stationId,
                 id: dates.id,
                 name: dates.name,
-                petName: dates.petName,
+                // petName: dates.petName,
                 sex: dates.sex + '',
                 password: '',
                 age: dates.age + 0,

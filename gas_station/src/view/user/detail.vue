@@ -4,10 +4,10 @@
       <Button class="btn-system" @click="back" style="float: right;">返回</Button>
       <div class="layout-content-form">
         <Form :model="formDates" :label-width="150" ref="formDates">
-          <Row type="flex">
-            <FormItem label="用户昵称" >{{formDates.petName}}
-            </FormItem>
-          </Row>
+          <!--<Row type="flex">-->
+            <!--<FormItem label="用户昵称" >{{formDates.petName}}-->
+            <!--</FormItem>-->
+          <!--</Row>-->
           <Row type="flex">
             <FormItem label="真实姓名" >{{formDates.name}}
             </FormItem>
@@ -93,7 +93,7 @@
               this.formDates = {
                 id: dates.id,
                 name: dates.name,
-                petName: dates.petName,
+                // petName: dates.petName,
                 sex: dates.sex + '',
                 password: '',
                 age: dates.age + 0,

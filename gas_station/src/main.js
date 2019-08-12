@@ -8,6 +8,9 @@ import 'iview/dist/styles/iview.css';
 import './assets/styles/cover/cover.less' // 覆盖样式
 import './assets/styles/base/base.less'
 import './assets/styles/layout/layout.less'
+import HappyScroll from 'vue-happy-scroll'
+import 'vue-happy-scroll/docs/happy-scroll.css'
+Vue.use(HappyScroll)
 
 import Icon from 'vue2-svg-icon/Icon.vue';
 Vue.component('icon', Icon);

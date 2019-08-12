@@ -35,7 +35,7 @@
                   <div class="itemSet" v-for="(item,index) in each" :key="index" style="margin-bottom: 10px">
                     <div style="float: left;margin-right:13px;">
                       <div v-for="(item1, index1) in item.children[0]" :key="index1" :style="tankCount < 3 ? 'margin-bottom: 20px': ''">
-                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :timerCount="timerCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
                       </div>
                     </div>
                     <div style="float: left;position: relative;z-index:2">
@@ -44,7 +44,7 @@
                     </div>
                     <div style="float: right;margin-left:23px">
                       <div  v-for="(item2, index2) in item.children[1]" :key="index2" :style="tankCount < 3 ? 'margin-bottom: 20px': ''">
-                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :timerCount="timerCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
                       </div>
                     </div>
                   </div>
@@ -54,7 +54,7 @@
                   <div class="itemSet" v-for="(item,index) in each" :key="index" style="margin-bottom: 10px">
                     <div style="float: left;margin-right:13px;">
                       <div v-for="(item1, index1) in item.children[0]" :key="index1">
-                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :timerCount="timerCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
                       </div>
                     </div>
                     <div style="float: left;position: relative;z-index:2">
@@ -63,7 +63,7 @@
                     </div>
                     <div style="float: left;margin-left:23px">
                       <div  v-for="(item2, index2) in item.children[1]" :key="index2" >
-                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :timerCount="timerCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
                       </div>
                     </div>
                   </div>
@@ -73,7 +73,7 @@
                   <div class="itemSet" v-for="(item,index) in each" :key="index" :style="item.id === -1 ? 'visibility: hidden;margin-bottom:10px':'visibility: visible;margin-bottom:10px'">
                     <div style="float: left;margin-right:13px;">
                       <div v-for="(item1, index1) in item.children[0]" :key="index1">
-                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index1*2+2 : 4" :tankNum="tankCount" :timerCount="timerCount" :status="item1.status" :refuel="item1.refuel" :class="item.length > 4 ? 'dir'+(index1*2+2):'dir24'" :close="item1.close" :name="item1.number" :oliType="item1.oilNumber" :oliVal="item1.oilValue === null ? '-' : item1.oilValue"></oligun>
                       </div>
                     </div>
                     <div style="float: left;position: relative;z-index:2">
@@ -82,14 +82,14 @@
                     </div>
                     <div style="float: left;margin-left:23px">
                       <div  v-for="(item2, index2) in item.children[1]" :key="index2" >
-                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
+                        <oligun :dir="item.length > 4 ? index2*2+1 : 3" :tankNum="tankCount" :timerCount="timerCount" :status="item2.status" :refuel="item2.refuel" :class="item.length > 4 ? 'dir'+(index2*2+1):'dir23'" :style="item.length > 7? 'margin-left: -14px': ''" :close="item2.close" :name="item2.number" :oliType="item2.oilNumber" :oliVal="item2.oilValue === null ? '-' : item2.oilValue"></oligun>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               </Col>
-              <Col span="6">
+              <Col span="6" style="min-height: 450px">
               <Carousel
                 v-model="value3"
                 :loop="setting.loop"
@@ -104,53 +104,53 @@
                   <div class="demo-carousel">
                     <div class="tankBox">
                       <div class="tankBoxTitle">油罐</div>
-                      <div style="position: relative;height: 100%" >
-                        <Col :span="spanVal" v-for="(items,indexs) in tankList" :key="indexs" style="height: 100%">
-                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
-                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
-                            <Row type="flex" justify="center" style="margin-bottom: 5px">
-                              <div style="position: relative">
-                                <div :class="oliTankBackground(item.oilTankStatus, 1)"></div>
-                                <div :class="oliTankBackground(item.oilTankStatus, 0)">
-                                  <div :class="oliTankColor(item.oilTankStatus)" :style="'height:' + (item.value === null ? 0 : item.value) +'%'"></div>
-                                  <div class="numQuantity">{{item.name}}罐{{item.oilNumber}}#</div>
+                          <div style="position: relative;height: 100%" >
+                          <Col :span="spanVal" v-for="(items,indexs) in tankList" :key="indexs" style="height: 100%">
+                            <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                            <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                              <Row type="flex" justify="center" style="margin-bottom: 5px">
+                                <div style="position: relative">
+                                  <div :class="oliTankBackground(item.oilTankStatus, 1)"></div>
+                                  <div :class="oliTankBackground(item.oilTankStatus, 0)">
+                                    <div :class="oliTankColor(item.oilTankStatus)" :style="'height:' + (item.value === null ? 0 : item.value) +'%'"></div>
+                                    <div class="numQuantity">{{item.name}}罐{{item.oilNumber}}#</div>
+                                  </div>
+                                  <img src="../../assets/leak.png" alt="" class="leakImage"  v-if="item.leak === true">
+                                  <img src="../../assets/equipIcon.png" alt="" class="leakImage" v-if="item.signalAndExploring === true" :style="item.leak === true ? 'right:-25px' : ''">
                                 </div>
-                                <img src="../../assets/leak.png" alt="" class="leakImage"  v-if="item.leak === true">
-                                <img src="../../assets/equipIcon.png" alt="" class="leakImage" v-if="item.signalAndExploring === true" :style="item.leak === true ? 'right:-25px' : ''">
+                              </Row>
+                              <div>
+                                <Row class="oliTankInfo" type="flex" justify="start">
+                                  <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                  <img :src="iconImage(item.oilTankStatus, 0)" alt="">
+                                  <span :style="textColor(item.oilTankStatus)">
+                                    <span>油罐压力</span>
+                                    <span>{{item.pressure === null ? '-' : item.pressure + ' pa'}}</span>
+                                  </span>
+                                  </Col>
+                                </Row>
+                                <Row class="oliTankInfo" type="flex" justify="start">
+                                  <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                  <img :src="iconImage(item.sidewaysStatus, 1)" alt="">
+                                  <span :style="textColor(item.sidewaysStatus)">
+                                    <span>测漏压力</span>
+                                    <span>{{item.sidewaysPressure === null ? '-' : item.sidewaysPressure + ' pa'}}</span>
+                                  </span>
+                                  </Col>
+                                </Row>
+                                <Row class="oliTankInfo" type="flex" justify="start">
+                                  <Col :span="oneSpan" :push="pushVal" style="text-align: left">
+                                  <img :src="remainG" alt="">
+                                  <span>
+                                     <span>剩余油量</span>
+                                    <span>{{item.value === null ? '未知' : item.value + '%'}}</span>
+                                   </span>
+                                  </Col>
+                                </Row>
                               </div>
-                            </Row>
-                            <div>
-                              <Row class="oliTankInfo" type="flex" justify="start">
-                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
-                                <img :src="iconImage(item.oilTankStatus, 0)" alt="">
-                                <span :style="textColor(item.oilTankStatus)">
-                                  <span>油罐压力</span>
-                                  <span>{{item.pressure === null ? '-' : item.pressure + ' pa'}}</span>
-                                </span>
-                                </Col>
-                              </Row>
-                              <Row class="oliTankInfo" type="flex" justify="start">
-                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
-                                <img :src="iconImage(item.sidewaysStatus, 1)" alt="">
-                                <span :style="textColor(item.sidewaysStatus)">
-                                  <span>测漏压力</span>
-                                  <span>{{item.sidewaysPressure === null ? '-' : item.sidewaysPressure + ' pa'}}</span>
-                                </span>
-                                </Col>
-                              </Row>
-                              <Row class="oliTankInfo" type="flex" justify="start">
-                                <Col :span="oneSpan" :push="pushVal" style="text-align: left">
-                                <img :src="remainG" alt="">
-                                <span>
-                                   <span>剩余油量</span>
-                                  <span>{{item.value === null ? '未知' : item.value + '%'}}</span>
-                                 </span>
-                                </Col>
-                              </Row>
                             </div>
                           </div>
-                        </div>
-                        </Col>
+                          </Col>
                       </div>
                     </div>
                   </div>
@@ -160,27 +160,31 @@
                   <div class="demo-carousel">
                     <div class="tankBox">
                       <div class="tankBoxTitle">管线</div>
-                      <div style="position: relative;height: 100%" >
-                        <Col :span="spanVal" v-for="(items,indexs) in pipeList" :key="indexs" style="height: 100%">
-                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
-                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
-                            <div>
-                              <Row type="flex" justify="center">
-                                <div  style="position: relative">
-                                  <img :src="item.status === 1 ? pipeG : pipeR" alt="" style="height:35px;width:70px">
-                                  <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
-                                  <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
-                                </div>
-                              </Row>
-                              <Row style="font-size: 14px;">{{item.number}}#</Row>
-                              <Row type="flex" justify="center">
-                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
-                              </Row>
-                            </div>
-                          </div>
-                        </div>
-                        </Col>
-                      </div>
+                     <div style="width: 100%;height:95%;">
+                       <happy-scroll color="#8391A5" size="4" resize hide-horizontal>
+                         <div style="position: relative;height: 100%;padding:5px 0" >
+                           <Col :span="spanPipe" v-for="(items,indexs) in pipeList" :key="indexs" style="height: 100%">
+                           <div  style="height: 100%;display: flex;flex-direction: column;justify-content: space-around">
+                             <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                               <div style="margin-bottom: 6px">
+                                 <Row type="flex" justify="center">
+                                   <div  style="position: relative">
+                                     <img :src="item.status === 1 ? pipeG : item.status === 2 ? pipeH : pipeR" alt="" style="height:35px;width:70px">
+                                     <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
+                                     <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
+                                   </div>
+                                 </Row>
+                                 <Row style="font-size: 14px;margin-top: -5px">{{item.number}}#</Row>
+                                 <Row type="flex" justify="center">
+                                   <div :class="item.status === 1 ? 'olitankStatus greenStatus' : item.status === 2 ? 'olitankStatus disStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : item.status === 2 ?'离线' : '报警'}}</div>
+                                 </Row>
+                               </div>
+                             </div>
+                           </div>
+                           </Col>
+                         </div>
+                       </happy-scroll>
+                     </div>
                     </div>
                   </div>
                 </CarouselItem>
@@ -189,27 +193,31 @@
                   <div class="demo-carousel">
                     <div class="tankBox">
                       <div class="tankBoxTitle">人井</div>
-                      <div style="position: relative;height: 100%" >
-                        <Col :span="spanVal" v-for="(items,indexs) in peopleWellList" :key="indexs" style="height: 100%">
-                        <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
-                          <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
-                            <div>
-                              <Row type="flex" justify="center">
-                                <div  style="position: relative">
-                                  <img :src="item.status === 1 ? wellG : wellR" alt="" style="width:62px;height:50px;">
-                                  <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
-                                  <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
-                                </div>
-                              </Row>
-                              <Row style="font-size: 14px;">{{item.number}}#</Row>
-                              <Row type="flex" justify="center">
-                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
-                              </Row>
-                            </div>
-                          </div>
-                        </div>
-                        </Col>
-                      </div>
+                     <div style="width: 100%;height:95%;">
+                       <happy-scroll color="#8391A5" size="4" resize hide-horizontal>
+                         <div style="position: relative;height: 100%;padding:5px 0" >
+                           <Col :span="spanPeo" v-for="(items,indexs) in peopleWellList" :key="indexs" style="height: 100%">
+                           <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
+                             <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
+                               <div style="margin-bottom: 6px">
+                                 <Row type="flex" justify="center">
+                                   <div  style="position: relative">
+                                     <img :src="item.status === 1 ? wellG : item.status === 2 ? wellH : wellR" alt="" style="width:62px;height:50px;">
+                                     <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
+                                     <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
+                                   </div>
+                                 </Row>
+                                 <Row style="font-size: 14px;margin-top: -5px">{{item.number}}#</Row>
+                                 <Row type="flex" justify="center">
+                                   <div :class="item.status === 1 ? 'olitankStatus greenStatus' : item.status === 2 ? 'olitankStatus disStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : item.status === 2 ?'离线' : '报警'}}</div>
+                                 </Row>
+                               </div>
+                             </div>
+                           </div>
+                           </Col>
+                         </div>
+                       </happy-scroll>
+                     </div>
                     </div>
                   </div>
                 </CarouselItem>
@@ -218,26 +226,30 @@
                   <div class="demo-carousel">
                     <div class="tankBox">
                       <div class="tankBoxTitle">油盆</div>
-                      <div style="position: relative;height: 100%;" >
-                        <Col :span="spanVal" v-for="(items,indexs) in oliBasinList" :key="indexs" style="height: 100%">
+                      <div style="width: 100%;height:95%;">
+                        <happy-scroll color="#8391A5" size="4" resize hide-horizontal>
+                      <div style="position: relative;height: 100%;padding:5px 0" >
+                        <Col :span="spanOli" v-for="(items,indexs) in oliBasinList" :key="indexs" style="height: 100%">
                         <div  style="height:100%;display: flex;flex-direction: column;justify-content: space-around">
                           <div v-for="(item,index) in items" :key="index" :style="item.id === -1 ? 'visibility:hidden': 'visibility:visble'">
-                            <div>
+                            <div style="margin-bottom: 6px">
                               <Row type="flex" justify="center">
                                 <div  style="position: relative">
-                                  <img :src="item.status === 1 ? bottomG : bottomR" alt="" style="width:60px;height:50px;">
+                                  <img :src="item.status === 1 ? bottomG : item.status === 2 ? bottomH : bottomR" alt="" style="width:60px;height:45px;">
                                   <img src="../../assets/leak.png" alt="" class="equipImage" v-show="item.alarm === true" :style="item.fault === true ? 'left:-20px' : ''">
                                   <img src="../../assets/equipIcon.png" alt="" class="equipImage" v-show="item.fault === true" :style="item.alarm === true ? 'left:25px;' : ''">
                                 </div>
                               </Row>
                               <Row style="font-size: 14px;">{{item.number}}#</Row>
                               <Row type="flex" justify="center">
-                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : '报警'}}</div>
+                                <div :class="item.status === 1 ? 'olitankStatus greenStatus' : item.status === 2 ? 'olitankStatus disStatus' : 'olitankStatus redStatus'">{{item.status === 1 ? '正常' : item.status === 2 ?'离线' : '报警'}}</div>
                               </Row>
                             </div>
                           </div>
                         </div>
                         </Col>
+                      </div>
+                        </happy-scroll>
                       </div>
                     </div>
                   </div>
@@ -313,13 +325,14 @@
               </Row>
               <Row>
                 <Col span="7">
-                  <div :class="nozzleClass">
+                  <div :class="nozzleClass" style="position: relative">
                     <img :src="nozzleImage" alt="">
+                    <img src="../../assets/stopUse.png" alt="" v-if="nozzleObj.status !== 2 && nozzleObj.close === true" style="width:18px;height: 18px;position: absolute;bottom:10px;left:10px">
                   </div>
                 </Col>
                 <Col span="16">
                   <Row type="flex" justify="start">
-                    <div :class="nozzleStatus" style="margin-left: 0">{{nozzleObj.status === 1 ? '正常' : nozzleObj.status === 2 ? '离线' : nozzleObj.status === 3 ? '预警' : nozzleObj.status === 4 && nozzleObj.close === false ? '报警': '停用'}}</div>
+                    <div :class="nozzleStatus" style="margin-left: 0">{{nozzleObj.status !== 2 && nozzleObj.close === true ? '停用' : nozzleObj.status === 1 ? '正常' : nozzleObj.status === 2 ? '离线' : nozzleObj.status === 3 ? '预警' : '报警'}}</div>
                   </Row>
                 <Row type="flex" justify="start" style="font-size:14px;margin-top: 20px">
                   平均气液比
@@ -371,13 +384,14 @@
     },
     data () {
       return {
+        timerCount: 0,
         isLimit: false,
         value3: 0,
         pushVal: 0,
         oneSpan: 0,
         setting: {
           loop: false,
-          autoplay: true,
+          autoplay: false,
           autoplaySpeed: 10000,
           dots: 'inside',
           radiusDot: false,
@@ -387,6 +401,9 @@
         pipeList:[],
         peopleWellList: [],
         oliBasinList: [],
+        spanPipe: 12,
+        spanPeo: 12,
+        spanOli: 12,
         onlyFlag: true,
         conType: '',
         conStatus: 0,
@@ -411,10 +428,13 @@
         celouH: require('@/assets/celou_h.png'),
         pipeG: require('@/assets/pipe_g.png'),
         pipeR: require('@/assets/pipe_r.png'),
+        pipeH: require('@/assets/pipe_h.png'),
         wellG: require('@/assets/peopleWell_g.png'),
         wellR: require('@/assets/peopleWell_r.png'),
+        wellH: require('@/assets/peopleWell_h.png'),
         bottomG: require('@/assets/tankBottom_g.png'),
         bottomR: require('@/assets/tankBottom_r.png'),
+        bottomH: require('@/assets/tankBottom_h.png'),
         nozzleList: [],
         nozzleObj: {
           tankerNumber: '',
@@ -2125,7 +2145,7 @@
           this.drawFour('fourGauge', this.tankInfo, this.conType)
         })
       },
-      commonInfo (arr, result) {
+      commonInfo (arr, result, spanType) {
         let even = [], odd = []
         for (let i = 0; i < result.length; i++) {
           if (i % 2 === 0) {
@@ -2148,12 +2168,10 @@
         }
         if (odd.length !== 0) {
           arr = [even, odd]
-          this.justifyVal = 'start'
-          this.spanVal = 12
+          spanType = 12
         } else {
           arr = [even]
-          this.justifyVal = 'center'
-          this.spanVal = 24
+          spanType = 24
         }
         return arr
       },
@@ -2161,7 +2179,7 @@
       getPipe (par) {
         pipeLine(par).then((res) => {
           if (res.data.code === 1000) {
-            this.pipeList = this.commonInfo(this.pipeList, res.data.content)
+            this.pipeList = this.commonInfo(this.pipeList, res.data.content,this.spanPipe)
           } else {
             this.pipeList = []
           }
@@ -2171,7 +2189,7 @@
       getPeopleWell (par) {
         peopleWell(par).then((res) => {
           if (res.data.code === 1000) {
-            this.peopleWellList = this.commonInfo(this.peopleWellList, res.data.content)
+            this.peopleWellList = this.commonInfo(this.peopleWellList, res.data.content,this.spanPeo)
           } else {
             this.peopleWellList = []
           }
@@ -2181,7 +2199,7 @@
       getoliBasin (par) {
         oliBasin(par).then((res) => {
           if (res.data.code === 1000) {
-            this.oliBasinList = this.commonInfo(this.oliBasinList, res.data.content)
+            this.oliBasinList = this.commonInfo(this.oliBasinList, res.data.content,this.spanOli)
           } else {
             this.oliBasinList = []
           }
@@ -2203,6 +2221,7 @@
         thi.getAlarm(thi.param)
         // 油罐监测
         thi.getTankInfo(thi.param)
+        thi.timerCount ++
         thi.mytimer = setTimeout(thi.allTimer, thi.allTime)
       },
     },
@@ -2319,7 +2338,7 @@
     background:url('../../assets/rightTank.png') no-repeat;
     background-size: 99% 100%;
     height:56vh;
-    padding: 0 5px 10px;
+    padding: 0 5px 0;
   }
   .tankBoxTitle{
     font-size: 13px;

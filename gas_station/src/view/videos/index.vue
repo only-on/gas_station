@@ -94,8 +94,8 @@
                   th.player_first = new EZUIKit.EZUIPlayer({
                     id: 'play_first',
                     autoplay: true,
-                    url: 'ezopen://open.ys7.com/605716456/1.live',
-                    accessToken: 'at.cf6y40gw26o1zoor6pqpgq3x8ws86sto-60s4d3uth6-11gzv5o-etrewpyz0',
+                    url: resp.data.content.address,
+                    accessToken: resp.data.content.accessToken,
                     decoderPath: '../../../static/ezopen/',
                     width: 800,
                     height: 400,
@@ -146,8 +146,8 @@
             this.player_first = new EZUIKit.EZUIPlayer({
               id: 'play_first',
               autoplay: true,
-              url: 'ezopen://open.ys7.com/605716456/1.live',
-              accessToken: 'at.cf6y40gw26o1zoor6pqpgq3x8ws86sto-60s4d3uth6-11gzv5o-etrewpyz0',
+              url: resp.data.content.address,
+              accessToken: resp.data.content.accessToken,
               decoderPath: '../../../static/ezopen/',
               width: 800,
               height: 400,
@@ -171,8 +171,8 @@
             this.player_first = new EZUIKit.EZUIPlayer({
               id: 'play_first',
               autoplay: true,
-              url: 'ezopen://open.ys7.com/605716456/1.live',
-              accessToken: 'at.cf6y40gw26o1zoor6pqpgq3x8ws86sto-60s4d3uth6-11gzv5o-etrewpyz0',
+              url: resp.data.content.address,
+              accessToken: resp.data.content.accessToken,
               decoderPath: '../../../static/ezopen/',
               width: 800,
               height: 400,

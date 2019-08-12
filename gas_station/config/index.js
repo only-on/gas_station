@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/olmgs/web': {
-        // target: 'http://192.168.100.63:8081',
+        // target: 'http://39.100.77.117:8003',
         target: 'http://localhost:8083',
         changeOrigin: true,
         pathRewrite: {

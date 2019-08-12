@@ -14,7 +14,7 @@
         <img :src="changeImage()" alt="" style="width:25px;height: 20px">
         </Col>
         <Col span="12">
-        <img src="../assets/stopUse.png" alt="" v-if="close === true" style="width:18px;height: 18px">
+        <img src="../assets/stopUse.png" alt="" v-if="status !== 2 && close === true" style="width:18px;height: 18px">
         <span v-else>{{oliVal}}</span>
         </Col>
       </Row>
@@ -30,7 +30,7 @@
 
 <script>
   export default {
-    props: ['dir', 'status', 'name', 'oliType', 'oliVal', 'refuel', 'close', 'tankNum'],
+    props: ['dir', 'status', 'name', 'oliType', 'oliVal', 'refuel', 'close', 'tankNum', 'timerCount'],
     data () {
       return {
         red: require('@/assets/red.png'),
@@ -42,7 +42,7 @@
         yellowg: require('@/assets/yellow.gif'),
         oligunImage: require('@/assets/oligun.png'),
         src: '',
-        currentRefuel: this.refuel
+        currentRefuel: this.refuel,
       }
     },
     created: function () {
@@ -51,11 +51,31 @@
     mounted () {
       this.test()
     },
-    watch: {
-      refuel(newVal, o){
-        this.currentRefuel = newVal
-        this.test()
+    computed: {
+      refuelStatus () {
+        const { refuel, timerCount } = this
+        return {refuel, timerCount}
       },
+    },
+    watch: {
+      //同时检测refuel timerCount两个属性
+      refuelStatus : {
+        handler:function (val) {
+          // console.log(val)
+          this.currentRefuel = val.refuel
+          this.test()
+        }
+      },
+      // // 加油状态改变时触发
+      // refuel(newVal, o){
+      //   this.currentRefuel = newVal
+      //   this.test()
+      // },
+      // // 定时器触发
+      // timerCount(){
+      //   this.currentRefuel = this.refuel
+      //   this.test()
+      // },
     },
     methods: {
       changeImage () {

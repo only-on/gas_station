@@ -30,9 +30,9 @@
             </Row>
             <Row type="flex" justify="start">
               <Col span="12" push="2">
-              <FormItem label="油罐容积">
+              <FormItem label="油罐容量">
                 {{item.size !== null ? item.size : '-'}}&nbsp;
-                <span v-show="item.size !== null">T</span>
+                <span v-show="item.size !== null">m³</span>
               </FormItem>
               </Col>
               <Col span="12">

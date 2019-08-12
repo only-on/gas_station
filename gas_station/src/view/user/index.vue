@@ -42,11 +42,11 @@
               return h('div', type)
             }
           },
-          {
-            title: '昵称',
-            key: 'petName',
-            align: 'left'
-          },
+          // {
+          //   title: '昵称',
+          //   key: 'petName',
+          //   align: 'left'
+          // },
           {
             title: '真实姓名',
             key: 'name',

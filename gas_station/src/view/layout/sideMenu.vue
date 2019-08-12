@@ -7,7 +7,7 @@
       <div class="person-info">
         <div style="height: 35px;width: 35px;border-radius: 50%;background: #CAEBFE;display: inline-block;margin-top: 15px;position: relative">
           <icon v-if="role === 0" name="layout_admin" :w="35" :h="35" style="position: absolute;top: 2px;left: 4px"></icon>
-          <icon v-if="role === 1" name="layout_user" :w="35" :h="35" style="position: absolute;top: 2px;left: 4px"></icon>
+          <icon v-if="role !== 0" name="layout_user" :w="35" :h="35" style="position: absolute;top: 2px;left: 4px"></icon>
           <Icon type="md-arrow-dropup" size="20" color="#fff" style="position: absolute;bottom: -17px;left: 7px"></Icon>
         </div>
         <div class="slider">

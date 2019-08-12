@@ -367,6 +367,7 @@
           yAxis: {
             type: 'value',
             name: '（次）',
+            minInterval: 1,
             splitLine: {
               show: true,
               lineStyle: {

@@ -89,7 +89,7 @@
           },
           {
             title: '告警位置',
-            key: 'position',
+            key: 'locationName',
             align: 'center'
           },
           {

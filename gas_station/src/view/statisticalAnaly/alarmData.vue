@@ -336,6 +336,7 @@
           yAxis: {
             type: 'value',
             name: '(次)',
+            minInterval: 1,
             nameTextStyle: {
               color: '#333',
               fontSize: 14

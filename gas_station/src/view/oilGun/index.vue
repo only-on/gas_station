@@ -14,7 +14,7 @@
             <img style="height: 80px;width: 80px;"
                  :src="changeImage(itemGun.status, itemGun.refuel)"
                  alt="" @click="gunClick(itemGun, item.number)">
-            <img src="../../assets/stopUse1.png" alt="" class="stopImage" v-if="itemGun.close === true" @click="gunClick(itemGun, item.number)">
+            <img src="../../assets/stopUse1.png" alt="" class="stopImage" v-if="itemGun.close === true && itemGun.status !== 2" @click="gunClick(itemGun, item.number)">
           </div>
           <div class="line-gray"></div>
         </div>
@@ -22,7 +22,7 @@
         <div :class="itemGun.status === 1 ? 'gun-status': itemGun.status === 4 ? 'gun-status-red': itemGun.status === 3 ? 'gun-status-yellow': itemGun.status === 2 ? 'gun-status-gray': ''">
           <div style="margin-bottom: 3px">气液比 {{itemGun.oilValue === null ? '-' : itemGun.oilValue}}</div>
           <div :class="itemGun.status === 1 ? 'gun-status-text': itemGun.status === 4 ? 'gun-status-text-red': itemGun.status === 3 ? 'gun-status-text-yellow': itemGun.status === 2 ? 'gun-status-text-gray': ''">
-            {{itemGun.close === true ? '停用' : itemGun.status === 1 ? '正常': itemGun.status === 4 && itemGun.close === false ? '报警' : itemGun.status === 4 && itemGun.close === true ? '停用': itemGun.status === 3 ? '预警': itemGun.status === 2 ? '通讯故障': ''}}
+            {{itemGun.close === true && itemGun.status !== 2 ? '停用' : itemGun.status === 1 ? '正常': itemGun.status === 4 && itemGun.close === false ? '报警' : itemGun.status === 4 && itemGun.close === true ? '停用': itemGun.status === 3 ? '预警': itemGun.status === 2 ? '通讯故障': ''}}
           </div>
         </div>
       </div>
@@ -31,20 +31,23 @@
     <Modal v-model="changeModal" width="700" :mask-closable="false" >
       <p slot="header" style="color:#666;height: 60px">
         <img style="height: 50px;width: 50px;margin-right: 10px" :src="formItem.status === 1 ? oil_green : formItem.status === 4 ? oil_red : formItem.status === 3 ? oil_yellow : formItem.status === 2 ? oil_gray: 'oil_green'" alt="">
-        <img src="../../assets/stopUse1.png" alt="" class="stopImageModal" v-if="formItem.close === true">
+        <img src="../../assets/stopUse1.png" alt="" class="stopImageModal" v-if="formItem.close === true && formItem.status !== 2">
         <span style="font-size: 17px;position: absolute;top: 20px;left: 80px;">
             {{formItem.tanker}}机{{formItem.number}}枪{{formItem.oilNumber}}#
-            <div  @click="changeTanker" class="switch-button" v-if="formItem.close && roles === '0'">
+            <div class="switch-button-gray" v-show="!formItem.valve && roles === '0'">
               <div class="switch-inner"></div>
             </div>
-            <div @click="changeTanker" class="switch-button-checked" v-if="!formItem.close && roles === '0'">
+            <div  @click="changeTanker" class="switch-button" v-show="formItem.close && roles === '0' && formItem.valve">
+              <div class="switch-inner"></div>
+            </div>
+            <div @click="changeTanker" class="switch-button-checked" v-show="(!formItem.close) && roles === '0' && formItem.valve">
               <div class="switch-inner-checked"></div>
             </div>
-          <span v-if="roles === '0'" class="gun-status-gray" style="margin-left: 15px">{{formItem.close === true || formItem.close === 'true' ? '油枪已关闭' : formItem.close === false || formItem.close === 'false' ? '油枪已开启' : '-'}}</span>
+          <span v-if="roles === '0' && (formItem.valve)" class="gun-status-gray" style="margin-left: 15px">{{formItem.close === true || formItem.close === 'true' ? '油枪已关闭' : formItem.close === false || formItem.close === 'false' ? '油枪已开启' : '-'}}</span>
           </span>
         <span :class="formItem.status === 1 ? 'gun-status': formItem.status === 4 ? 'gun-status-red': formItem.status === 3 ? 'gun-status-yellow': formItem.status === 2 ? 'gun-status-gray': ''">
               <span :class="formItem.status === 1 ? 'gun-status-text': formItem.status === 4 ? 'gun-status-text-red': formItem.status === 3 ? 'gun-status-text-yellow': formItem.status === 2 ? 'gun-status-text-gray': ''">
-                {{formItem.close === true ? '停用' : formItem.status === 1 ? '正常': formItem.status === 4 ? '报警': formItem.status === 3 ? '预警': formItem.status === 2 ? '通讯故障': ''}}
+                {{formItem.close === true && formItem.status !== 2 ? '停用' : formItem.status === 1 ? '正常': formItem.status === 4 ? '报警': formItem.status === 3 ? '预警': formItem.status === 2 ? '通讯故障': ''}}
               </span>
               <span style="margin-left: 10px">气液比{{formItem.oilValue === null ? '-' : formItem.oilValue}}</span>
           </span>
@@ -56,15 +59,15 @@
             {{formItem.seconds === null ? '-' : formItem.seconds}}
           </div>
           <div>
-            加油时间
+            加油时间（s）
           </div>
           </Col>
           <Col span="4">
           <div class="modal-text-color">
-            {{formItem.oilSpeed === null ? '-' : formItem.oilSpeed}}
+            {{formItem.gasSpeed === null ? '-' : formItem.gasSpeed}}
           </div>
           <div>
-            平均流速（L/Min）
+            气体平均流速（L/Min）
           </div>
           </Col>
           <Col span="4">
@@ -128,7 +131,7 @@
           oilValue: '-',
           tanker: '',
           oilFlow: '-',
-          oilSpeed: '-',
+          gasSpeed: '-',
           gasFlow: '-',
           seconds: '-',
           liquidResistanceal: '-'
@@ -147,7 +150,7 @@
     },
     methods: {
       changeTanker () {
-        this.$Spin.show()
+        // this.$Spin.show()
         let closestatus = this.formItem.close === true ? false : true
         let para = {
           id: this.formItem.id,
@@ -156,52 +159,25 @@
         nozzleClose(para).then((res) => {
           if (res.data.code === 1000) {
             this.$Message.success('下发命令成功')
-            let par = {
-              nozzleId: this.formItem.id
-            }
-            getNozzleDetails(par).then((res) => {
-              if (res.data.code === 1000) {
-                let items = res.data.content
-                this.formItem.status = items.status
-                this.formItem.number = items.number
-                this.formItem.oilNumber = items.oilNumber
-                this.formItem.oilValue = items.oilValue
-                this.formItem.tanker = items.tankerNumber
-                this.formItem.oilFlow = items.oilFlow
-                this.formItem.oilSpeed = items.oilSpeed
-                this.formItem.gasFlow = items.gasFlow
-                this.formItem.seconds = items.seconds
-                this.formItem.liquidResistanceal = items.liquidResistanceal
-                this.formItem.close = items.close
-                let vm = this
-                vm.$nextTick(function () {
-                  if (items.list !== null) {
-                    if (items.list.length > 0) {
-                      // 折线图数据
-                      for (let i = 0; i < items.list.length; i++) {
-                        let s = {
-                          name: items.list[i].time,
-                          value:[items.list[i].time, items.list[i].value]
-                        }
-                        vm.echartsDates.push(s)
-                      }
-                    }
-                  }
-                })
-              } else {
-                this.formItem.oilFlow = '-'
-                this.formItem.oilSpeed = '-'
-                this.formItem.gasFlow = '-'
-                this.formItem.seconds = '-'
-                this.formItem.liquidResistanceal = '-'
+            this.changeModal = false
+            let vm = this
+            setTimeout(function () {
+              let par = {
+                gasStationId: JSON.parse(sessionStorage.getItem('station')).stationId
               }
-            })
+              getNozzle(par).then((ressp) => {
+                if (ressp.data.code === 1000) {
+                  vm.list = ressp.data.content.tankers
+                  vm.gifTimeout()
+                }
+              })
+            }, 2000)
           } else {
             this.$Message.error(res.data.message)
           }
-          this.$Spin.hide();
+          // this.$Spin.hide();
         })
-        this.$Spin.hide();
+        // this.$Spin.hide();
       },
       gifTimeout () {
         let thi = this
@@ -267,10 +243,12 @@
             this.formItem.oilValue = items.oilValue
             this.formItem.tanker = items.tankerNumber
             this.formItem.oilFlow = items.oilFlow
-            this.formItem.oilSpeed = items.oilSpeed
+            this.formItem.gasSpeed = items.gasSpeed
             this.formItem.gasFlow = items.gasFlow
             this.formItem.seconds = items.seconds
             this.formItem.close = items.close
+            this.formItem.liquidResistanceal = items.liquidResistanceal
+            this.formItem.valve = items.valve
             let vm = this
             vm.changeModal = true
             vm.$nextTick(function () {
@@ -295,9 +273,10 @@
             this.formItem.tanker = item.tankerNumber
             this.formItem.close = item.close
             this.formItem.oilFlow = '-'
-            this.formItem.oilSpeed = '-'
+            this.formItem.gasSpeed = '-'
             this.formItem.gasFlow = '-'
             this.formItem.seconds = '-'
+            this.formItem.liquidResistanceal = '-'
           }
         })
         this.changeModal = true
@@ -437,6 +416,18 @@
     color: @modal-text-blue;
     font-size: 20px;
     margin-bottom: 20px;
+  }
+  .switch-button-gray {
+    margin-left: 20px;
+    width: 45px;
+    height: 15px;
+    line-height: 15px;
+    border-radius: 22px;
+    vertical-align: middle;
+    border: 1px solid @main-gun-stutas-gray;
+    background-color: @main-gun-stutas-gray;
+    display: inline-block;
+    position: relative;
   }
   .switch-button {
     margin-left: 20px;
